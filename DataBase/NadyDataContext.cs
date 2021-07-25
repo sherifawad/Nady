@@ -21,7 +21,7 @@ namespace DataBase
 
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberDetails> MemberDetails { get; set; }
-        public DbSet<MemberFollower> MemberFollowers { get; set; }
+        public DbSet<MemberHistory> MemberHistories { get; set; }
         public DbSet<MemberPayment> MemberPayments { get; set; }
         public DbSet<ScheduledPayment> ScheduledPayments { get; set; }
         public NadyDataContext(string dbPath)
@@ -54,6 +54,7 @@ namespace DataBase
             {
                 //optionsBuilder.EnableSensitiveDataLogging();
                 //optionsBuilder.UseSqlite($"Filename={_dbPath}");
+
             }
             catch (Exception ex)
             {

@@ -9,8 +9,6 @@ namespace DataBase.Models
     {
         [Required]
         public string MemberId { get; set; }
-        [Required]
-        public string Name { get; set; }
         public string NickName { get; set; }
         public string Phone { get; set; }
         public string Image { get; set; }

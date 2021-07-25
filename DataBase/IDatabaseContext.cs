@@ -10,6 +10,8 @@ namespace DataBase
 {
     public interface IDatabaseContext : IDisposable
     {
+        ChangeTracker ChangeTracker { get; }
+
         EntityEntry Entry(object entity);
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

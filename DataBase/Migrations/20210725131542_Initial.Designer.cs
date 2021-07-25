@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(NadyDataContext))]
-    [Migration("20210723182732_Initial")]
+    [Migration("20210725131542_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,16 +27,17 @@ namespace DataBase.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsBasic")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("PreserveDate")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<string>("Note")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RelationShip")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -60,10 +61,6 @@ namespace DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("NickName")
                         .HasColumnType("TEXT");
 
@@ -78,36 +75,37 @@ namespace DataBase.Migrations
                     b.ToTable("MemberDetails");
                 });
 
-            modelBuilder.Entity("DataBase.Models.MemberFollower", b =>
+            modelBuilder.Entity("DataBase.Models.MemberHistory", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("AddedDate")
+                    b.Property<DateTime>("Added")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Ended")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MemberId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime?>("Preserved")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Note")
+                    b.Property<DateTime?>("Resumed")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RelationShip")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("RemovedDate")
+                    b.Property<DateTime?>("Separated")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MemberId");
+                    b.HasIndex("MemberId")
+                        .IsUnique();
 
-                    b.ToTable("MemberFollowers");
+                    b.ToTable("MemberHistories");
                 });
 
             modelBuilder.Entity("DataBase.Models.MemberPayment", b =>
@@ -184,11 +182,11 @@ namespace DataBase.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataBase.Models.MemberFollower", b =>
+            modelBuilder.Entity("DataBase.Models.MemberHistory", b =>
                 {
                     b.HasOne("DataBase.Models.Member", null)
-                        .WithMany("MemberFollower")
-                        .HasForeignKey("MemberId")
+                        .WithOne("MemberHistory")
+                        .HasForeignKey("DataBase.Models.MemberHistory", "MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

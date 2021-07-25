@@ -12,11 +12,11 @@ namespace DataBase.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     IsBasic = table.Column<bool>(nullable: false),
                     Code = table.Column<string>(nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    PreserveDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false)
+                    RelationShip = table.Column<string>(nullable: true),
+                    Note = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,6 @@ namespace DataBase.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     MemberId = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
                     NickName = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     Image = table.Column<string>(nullable: true),
@@ -47,22 +46,22 @@ namespace DataBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MemberFollowers",
+                name: "MemberHistories",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     MemberId = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    RelationShip = table.Column<string>(nullable: true),
-                    AddedDate = table.Column<DateTime>(nullable: false),
-                    RemovedDate = table.Column<DateTime>(nullable: false),
-                    Note = table.Column<string>(nullable: true)
+                    Added = table.Column<DateTime>(nullable: false),
+                    Ended = table.Column<DateTime>(nullable: true),
+                    Preserved = table.Column<DateTime>(nullable: true),
+                    Resumed = table.Column<DateTime>(nullable: true),
+                    Separated = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MemberFollowers", x => x.Id);
+                    table.PrimaryKey("PK_MemberHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MemberFollowers_Members_MemberId",
+                        name: "FK_MemberHistories_Members_MemberId",
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
@@ -122,9 +121,10 @@ namespace DataBase.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_MemberFollowers_MemberId",
-                table: "MemberFollowers",
-                column: "MemberId");
+                name: "IX_MemberHistories_MemberId",
+                table: "MemberHistories",
+                column: "MemberId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberPayments_MemberId",
@@ -144,7 +144,7 @@ namespace DataBase.Migrations
                 name: "MemberDetails");
 
             migrationBuilder.DropTable(
-                name: "MemberFollowers");
+                name: "MemberHistories");
 
             migrationBuilder.DropTable(
                 name: "ScheduledPayments");

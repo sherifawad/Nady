@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data source=Nady.db"
+    "DefaultConnection": "Data source=..\\DataBase\\Nady.db"
   }
 }
