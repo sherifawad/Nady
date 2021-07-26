@@ -25,6 +25,7 @@ namespace Nady.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetAllMembers()
         {
+            throw new ArgumentException("Test Exception");
             return Ok(await _unitOfWork.Repository<Member>().GetAllAsync());
         }
 
