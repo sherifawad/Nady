@@ -1,5 +1,6 @@
 ﻿using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,13 @@ namespace DataBase.Repository
             dbSet = _context.Set<T>();
         }
 
-        public async Task<bool> AddItemAsync(T item, bool save = false) 
+        public async Task<T> AddItemAsync(T item, bool save = false) 
         {
             await dbSet.AddAsync(item);
             if (save)
                 await _context.SaveChangesAsync();
 
-            return await Task.FromResult(true);
+            return item;
         }
 
         public async Task<bool> DeleteItemAsync(T item, bool save = false) 

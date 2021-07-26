@@ -1,4 +1,5 @@
 ﻿using DataBase.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace DataBase.Repository
     public interface IRepository<TKey, T> where T : BaseModel
     {
 
-        Task<bool> AddItemAsync(T item, bool save = false) ;
+        Task<T> AddItemAsync(T item, bool save = false) ;
         Task<bool> UpdateItemAsync(T item, bool save = false) ;
         Task<bool> InsertOrUpdate(TKey id, T item, bool save = false) ;
         Task<bool> DeleteItemAsync(T item, bool save = false);

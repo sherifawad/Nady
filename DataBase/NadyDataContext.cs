@@ -1,4 +1,5 @@
-﻿using DataBase.Models;
+﻿using DataBase.Configuration;
+using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -41,10 +42,10 @@ namespace DataBase
 
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppContext).Assembly);
 
-            //if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
-            //{
-            //    modelBuilder.ApplyDataFixForSqlite();
-            //}
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+            {
+                modelBuilder.ApplyDataFixForSqlite();
+            }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
