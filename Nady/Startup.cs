@@ -33,7 +33,7 @@ namespace Nady
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<IDatabaseContext, NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection")));
             services.AddApplicationServices();
             services.AddSwaggerGen(c =>
             {

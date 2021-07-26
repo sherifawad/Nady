@@ -15,6 +15,7 @@ namespace Nady.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            //services.AddScoped(typeof(IDatabaseContext), (typeof(NadyDataContext)));
             services.AddScoped(typeof(IRepository<,>), (typeof(Repository<,>)));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<ApiBehaviorOptions>(options =>

@@ -18,7 +18,7 @@ namespace DataBase.UnitOfWork
         //{
         //    _databaseContext = databaseContext;
         //}
-        public UnitOfWork(NadyDataContext context)
+        public UnitOfWork(IDatabaseContext context)
         {
             _Context = context;
         }
