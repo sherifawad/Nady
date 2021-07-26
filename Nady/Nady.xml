@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nady</name>
+    </assembly>
+    <members>
+        <member name="T:Nady.Controllers.MembersController">
+            <summary>
+            Members Controllers
+            </summary>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.#ctor(DataBase.UnitOfWork.IUnitOfWork)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="unitOfWork"></param>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.GetAllMembers">
+            <summary>
+            Get all members
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.GetMemberById(System.String)">
+            <summary>
+            Get memberBy Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.GetMemberByName(System.String)">
+            <summary>
+            Get memeber by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.CreateMember(DataBase.Models.Member)">
+            <summary>
+            Create a new member
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.UpadateMember(System.String,DataBase.Models.Member)">
+            <summary>
+            Update a member
+            </summary>
+            <param name="id"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.MembersController.DeleteMember(System.String)">
+            <summary>
+            Delete a member
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

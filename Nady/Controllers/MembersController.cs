@@ -1,5 +1,6 @@
 ﻿using DataBase.Models;
 using DataBase.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nady.Errors;
 using System;
@@ -11,26 +12,41 @@ using System.Threading.Tasks;
 
 namespace Nady.Controllers
 {
+    /// <summary>
+    /// Members Controllers
+    /// </summary>
     public class MembersController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="unitOfWork"></param>
         public MembersController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
 
-        // GET: api/<MembersController>
+        /// <summary>
+        /// Get all members
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetAllMembers()
         {
-            throw new ArgumentException("Test Exception");
             return Ok(await _unitOfWork.Repository<Member>().GetAllAsync());
         }
 
-        // GET api/<MembersController>/5
+        /// <summary>
+        /// Get memberBy Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Member>> GetMemberById(string id)
         {
             var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == id, $"{nameof(Member.MemberDetails)},{nameof(Member.MemberHistory)},{nameof(Member.MemberPayments)}");
@@ -40,8 +56,14 @@ namespace Nady.Controllers
             return member;
         }
 
-        // GET api/<MembersController>/5
+        /// <summary>
+        /// Get memeber by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet("name/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Member>>> GetMemberByName(string name)
         {
             var members = await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(name.ToLower()), orderBy: x => x.OrderBy(y => y.Name));
@@ -51,8 +73,14 @@ namespace Nady.Controllers
             return members;
         }
 
-        // POST api/<MembersController>
+        /// <summary>
+        /// Create a new member
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateMember([FromBody] Member value)
         {
             var result = await _unitOfWork.Repository<Member>().AddItemAsync(value, false);
@@ -63,8 +91,15 @@ namespace Nady.Controllers
 
         }
 
-        // PUT api/<MembersController>/5
+        /// <summary>
+        /// Update a member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpadateMember(string id, [FromBody] Member value)
         {
             var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == id);
@@ -75,8 +110,15 @@ namespace Nady.Controllers
             return BadRequest("Failed to update");
         }
 
-        // DELETE api/<MembersController>/5
+        /// <summary>
+        /// Delete a member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteMember(string id)
         {
             var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == id);

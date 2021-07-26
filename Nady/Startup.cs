@@ -13,6 +13,7 @@ using Nady.Middleware;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -36,8 +37,22 @@ namespace Nady
             services.AddApplicationServices();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Nady", Version = "v1" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "Nady", Version = "v1",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Name = "Sherif Awad",
+                        Email = "shereifawad@gmail.com"
+                    }
+                });
 
+                // genrate the xml docs that'll drive the swagger docs
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
+                //show controller methods name in swagger
                 c.CustomOperationIds(apiDescriotion => apiDescriotion.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null);
             });
         }
