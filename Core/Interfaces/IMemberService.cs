@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace Core.Interfaces
 {
     public interface IMemberService
     {

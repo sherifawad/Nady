@@ -1,14 +1,10 @@
 ﻿using Core.Models;
 using DataBase;
-using DataBase.Models;
 using DataBase.Repository;
 using DataBase.UnitOfWork;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.UnitOfWork

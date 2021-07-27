@@ -1,5 +1,5 @@
-﻿using Core.Models;
-using DataBase.Models;
+﻿using Core.Interfaces;
+using Core.Models;
 using DataBase.UnitOfWork;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Http;

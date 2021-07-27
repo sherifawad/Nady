@@ -1,5 +1,4 @@
-﻿using DataBase.Models.Enum;
-using Core.Models.Enum;
+﻿using Core.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +15,7 @@ namespace Core.Models
         public DateTime? AccessesDate { get; set; }
         public bool Used { get; set; }
         public Gate Gate { get; set; }
-
+        public string Note { get; set; }
         public virtual Member Member { get; set; }
     }
 }

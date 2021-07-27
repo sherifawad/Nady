@@ -13,24 +13,11 @@ namespace DataBase
 {
     public class NadyDataContext : DbContext, IDatabaseContext
     {
-        private readonly string _dbPath;
-
-
-
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberDetails> MemberDetails { get; set; }
         public DbSet<MemberHistory> MemberHistories { get; set; }
         public DbSet<MemberPayment> MemberPayments { get; set; }
         public DbSet<ScheduledPayment> ScheduledPayments { get; set; }
-        //public NadyDataContext(string dbPath)
-        //{
-
-        //    _dbPath = dbPath ?? Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), "DataBase.db3");
-        //    //SQLitePCL.Batteries_V2.Init();
-
-        //    this.Database.EnsureCreated();
-        //}
-
         public NadyDataContext(DbContextOptions<NadyDataContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

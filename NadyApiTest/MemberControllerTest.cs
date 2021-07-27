@@ -1,14 +1,5 @@
 using Core.Models;
-using DataBase;
-using DataBase.Models;
-using DataBase.UnitOfWork;
-using FakeItEasy;
-using Infrastructure.UnitOfWork;
-using Microsoft.AspNetCore.Mvc;
-using Nady.Controllers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 

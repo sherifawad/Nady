@@ -9,7 +9,7 @@
             Members Controllers
             </summary>
         </member>
-        <member name="M:Nady.Controllers.MembersController.#ctor(Infrastructure.Services.IMemberService)">
+        <member name="M:Nady.Controllers.MembersController.#ctor(Core.Interfaces.IMemberService)">
             <summary>
             Constructor
             </summary>

@@ -12,11 +12,11 @@ namespace Core.Models
         public string Name { get; set; }
         public MemberDetails MemberDetails { get; set; }
         public MemberStatus MemberStatus { get; set; }
-        public virtual IEnumerable<MemberHistory> MemberHistoriesList { get; set; } = new List<MemberHistory>();
+        public virtual List<MemberHistory> MemberHistoriesList { get; set; }
         public bool IsOwner { get; set; }
         public string Code { get; set; }
         public string RelationShip { get; set; }
         public string Note { get; set; }
-        public virtual IEnumerable<MemberPayment> MemberPayments { get; set; } = new List<MemberPayment>();
+        public virtual List<MemberPayment> MemberPayments { get; set; } = new List<MemberPayment>();
     }
 }

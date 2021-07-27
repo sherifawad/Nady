@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using Core.Interfaces;
+using Core.Models;
 using DataBase.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,14 @@ namespace Infrastructure.Services
         }
         public async Task<Member> CreateMemberAsync(string name, bool isOwner = false, string Code = null, string relationship = null)
         {
-            var member = new Member { Name = name, IsOwner = isOwner, Code = Code, RelationShip = relationship };
+            var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+            if (DublicateName != null) return null;
+            var member = new Member { Name = name, IsOwner = isOwner, Code = Code, RelationShip = relationship};
+            member.MemberHistoriesList = new List<MemberHistory>();
+            member.MemberHistoriesList.Add(new MemberHistory { Date = DateTime.Now, Title = "Added" });
             await _unitOfWork.Repository<Member>().AddItemAsync(member);
             // save to db
             if (await _unitOfWork.Complete()) return member;
-
-            // return order
             return null;
         }
         
@@ -91,7 +94,6 @@ namespace Infrastructure.Services
             // save to db
             if (await _unitOfWork.Complete()) return member;
 
-            // return order
             return null;
         }
     }

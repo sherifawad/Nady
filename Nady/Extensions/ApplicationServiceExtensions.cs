@@ -1,4 +1,5 @@
-﻿using DataBase;
+﻿using Core.Interfaces;
+using DataBase;
 using DataBase.Repository;
 using DataBase.UnitOfWork;
 using Infrastructure.Services;
@@ -21,6 +22,10 @@ namespace Nady.Extensions
             services.AddScoped(typeof(IRepository<,>), (typeof(Repository<,>)));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<IMemberHistoryService, MemberHistoryService>();
+            services.AddScoped<IMemberPaymentService, MemberPaymentService>();
+            services.AddScoped<IScheduledPaymentService, ScheduledPaymentService>();
+            services.AddScoped<IVisitorService, VisitorService>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>
