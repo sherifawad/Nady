@@ -1,5 +1,7 @@
-﻿using DataBase.Models;
+﻿using Core.Models;
+using DataBase.Models;
 using DataBase.UnitOfWork;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nady.Errors;
@@ -17,15 +19,15 @@ namespace Nady.Controllers
     /// </summary>
     public class MembersController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMemberService _memberService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="unitOfWork"></param>
-        public MembersController(IUnitOfWork unitOfWork)
+        /// <param name="memberService"></param>
+        public MembersController(IMemberService memberService)
         {
-            _unitOfWork = unitOfWork;
+            _memberService = memberService;
         }
 
 
@@ -36,7 +38,7 @@ namespace Nady.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetAllMembers()
         {
-            return Ok(await _unitOfWork.Repository<Member>().GetAllAsync());
+            return Ok(await _memberService.GetMembersAsync());
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace Nady.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Member>> GetMemberById(string id)
         {
-            var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == id, $"{nameof(Member.MemberDetails)},{nameof(Member.MemberHistory)},{nameof(Member.MemberPayments)}");
+            var member = await _memberService.GetMemberAsync(id);
 
             if (member == null) return NotFound(new ApiResponse(404));
 
@@ -64,27 +66,27 @@ namespace Nady.Controllers
         [HttpGet("name/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Member>>> GetMemberByName(string name)
+        public async Task<ActionResult<IReadOnlyList<Member>>> GetMemberByName(string name)
         {
-            var members = await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(name.ToLower()), orderBy: x => x.OrderBy(y => y.Name));
+            var members = await _memberService.GetMembersByNameAsync(name);
 
             if (members == null) return NotFound(new ApiResponse(404));
 
-            return members;
+            return Ok(members);
         }
 
         /// <summary>
         /// Create a new member
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="member"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateMember([FromBody] Member value)
+        public async Task<IActionResult> CreateMember([FromBody] Member member)
         {
-            var result = await _unitOfWork.Repository<Member>().AddItemAsync(value, false);
-            if (await _unitOfWork.Complete()) 
+            var result = await _memberService.CreateMemberAsync(member.Name, member.IsOwner, member.Code, member.RelationShip);
+            if (result != null) 
                 return Created("", result);
 
             return BadRequest("Failed to Add Member");
@@ -102,10 +104,10 @@ namespace Nady.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpadateMember(string id, [FromBody] Member value)
         {
-            var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == id);
+            var member = await _memberService.GetMemberAsync(id);
             if (member == null) return NotFound(new ApiResponse(404));
-            await _unitOfWork.Repository<Member>().UpdateItemAsync(value, false);
-            if (await _unitOfWork.Complete()) return Ok(value);
+            var result = await _memberService.UpdateMemberAsync(value);
+            if (result != null) return Ok(result);
 
             return BadRequest("Failed to update");
         }
@@ -117,14 +119,11 @@ namespace Nady.Controllers
         /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteMember(string id)
         {
-            var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == id);
-            if (member == null) return NotFound(new ApiResponse(404));
-            await _unitOfWork.Repository<Member>().DeleteItemAsync(member, false);
-            if (await _unitOfWork.Complete()) return Ok(id);
+            var result = await _memberService.DeleteMemberAsync(id);
+            if (result) return Ok(id);
 
             return BadRequest("Problem deleting the message");
         }

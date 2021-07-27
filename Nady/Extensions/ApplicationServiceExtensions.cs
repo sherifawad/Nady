@@ -1,6 +1,8 @@
 ﻿using DataBase;
 using DataBase.Repository;
 using DataBase.UnitOfWork;
+using Infrastructure.Services;
+using Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Nady.Errors;
@@ -18,6 +20,7 @@ namespace Nady.Extensions
             //services.AddScoped(typeof(IDatabaseContext), (typeof(NadyDataContext)));
             services.AddScoped(typeof(IRepository<,>), (typeof(Repository<,>)));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IMemberService, MemberService>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

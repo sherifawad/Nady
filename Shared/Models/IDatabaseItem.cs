@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataBase.Models
+namespace Shared.Models
 {
     public interface IDatabaseItem<T>
     {

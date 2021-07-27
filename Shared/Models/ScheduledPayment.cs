@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Shared.Models.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace DataBase.Models
+namespace Shared.Models
 {
     public class ScheduledPayment : BaseModel
     {
@@ -14,5 +16,9 @@ namespace DataBase.Models
         [Required]
         public DateTime PaymentDueDate { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+
+        public string Note { get; set; }
+
+        public virtual MemberPayment MemberPayment { get; set; }
     }
 }

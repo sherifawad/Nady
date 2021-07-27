@@ -1,5 +1,5 @@
-﻿using DataBase.Models;
-using DataBase.Repository;
+﻿using DataBase.Repository;
+using Core.Models;
 using System;
 using System.Threading.Tasks;
 

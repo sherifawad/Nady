@@ -9,11 +9,11 @@
             Members Controllers
             </summary>
         </member>
-        <member name="M:Nady.Controllers.MembersController.#ctor(DataBase.UnitOfWork.IUnitOfWork)">
+        <member name="M:Nady.Controllers.MembersController.#ctor(Infrastructure.Services.IMemberService)">
             <summary>
             Constructor
             </summary>
-            <param name="unitOfWork"></param>
+            <param name="memberService"></param>
         </member>
         <member name="M:Nady.Controllers.MembersController.GetAllMembers">
             <summary>
@@ -35,14 +35,14 @@
             <param name="name"></param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.MembersController.CreateMember(DataBase.Models.Member)">
+        <member name="M:Nady.Controllers.MembersController.CreateMember(Core.Models.Member)">
             <summary>
             Create a new member
             </summary>
-            <param name="value"></param>
+            <param name="member"></param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.MembersController.UpadateMember(System.String,DataBase.Models.Member)">
+        <member name="M:Nady.Controllers.MembersController.UpadateMember(System.String,Core.Models.Member)">
             <summary>
             Update a member
             </summary>

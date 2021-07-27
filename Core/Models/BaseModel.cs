@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DataBase.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace DataBase.Models
+namespace Core.Models
 {
     public class BaseModel : IDatabaseItem<string>
     {

@@ -1,5 +1,8 @@
-﻿using DataBase.Models;
+﻿using Core.Models;
+using DataBase;
+using DataBase.Models;
 using DataBase.Repository;
+using DataBase.UnitOfWork;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,16 +11,12 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataBase.UnitOfWork
+namespace Infrastructure.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDatabaseContext _Context;
         private Hashtable _repositories;
-        //public UnitOfWork(IDatabaseContext databaseContext)
-        //{
-        //    _databaseContext = databaseContext;
-        //}
         public UnitOfWork(IDatabaseContext context)
         {
             _Context = context;

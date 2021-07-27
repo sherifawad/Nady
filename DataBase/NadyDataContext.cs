@@ -1,9 +1,6 @@
-﻿using DataBase.Configuration;
-using DataBase.Models;
+﻿using Core.Models;
+using DataBase.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -64,22 +61,22 @@ namespace DataBase
         }
     }
 
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<NadyDataContext>
-    {
-        public NadyDataContext CreateDbContext(string[] args)
-        {
-            //IConfigurationRoot configuration = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Nady/appsettings.json")
-            //    .Build();
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../DataBase/dataSettings.json")
-                .Build();
-            var builder = new DbContextOptionsBuilder<NadyDataContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlite(connectionString);
-            return new NadyDataContext(builder.Options);
-        }
-    }
+    //public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<NadyDataContext>
+    //{
+    //    public NadyDataContext CreateDbContext(string[] args)
+    //    {
+    //        //IConfigurationRoot configuration = new ConfigurationBuilder()
+    //        //    .SetBasePath(Directory.GetCurrentDirectory())
+    //        //    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Nady/appsettings.json")
+    //        //    .Build();
+    //        IConfigurationRoot configuration = new ConfigurationBuilder()
+    //            .SetBasePath(Directory.GetCurrentDirectory())
+    //            .AddJsonFile(@Directory.GetCurrentDirectory() + "/../DataBase/dataSettings.json")
+    //            .Build();
+    //        var builder = new DbContextOptionsBuilder<NadyDataContext>();
+    //        var connectionString = configuration.GetConnectionString("DefaultConnection");
+    //        builder.UseSqlite(connectionString);
+    //        return new NadyDataContext(builder.Options);
+    //    }
+    //}
 }
