@@ -22,14 +22,14 @@ namespace DataBase
         public DbSet<MemberHistory> MemberHistories { get; set; }
         public DbSet<MemberPayment> MemberPayments { get; set; }
         public DbSet<ScheduledPayment> ScheduledPayments { get; set; }
-        public NadyDataContext(string dbPath)
-        {
+        //public NadyDataContext(string dbPath)
+        //{
 
-            _dbPath = dbPath ?? Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), "DataBase.db3");
-            //SQLitePCL.Batteries_V2.Init();
+        //    _dbPath = dbPath ?? Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), "DataBase.db3");
+        //    //SQLitePCL.Batteries_V2.Init();
 
-            this.Database.EnsureCreated();
-        }
+        //    this.Database.EnsureCreated();
+        //}
 
         public NadyDataContext(DbContextOptions<NadyDataContext> options) : base(options) { }
 

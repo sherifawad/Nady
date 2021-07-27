@@ -27,7 +27,8 @@ namespace Nady
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<IDatabaseContext, NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<IDatabaseContext, NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection"),
+                x => x.MigrationsAssembly(nameof(Infrastructure))));
             services.AddApplicationServices();
             services.AddSwaggerGen(c =>
             {
