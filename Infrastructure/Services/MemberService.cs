@@ -17,11 +17,12 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Member> CreateMemberAsync(string name, bool isOwner = false, string Code = null, string relationship = null)
+        public async Task<Member> CreateMemberAsync(string name, MemberDetails memberDetails, bool isOwner = false, string Code = null, string relationship = null)
         {
             var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower() == name.ToLower());
             if (DublicateName != null) return null;
-            var member = new Member { Name = name, IsOwner = isOwner, Code = Code, RelationShip = relationship};
+            memberDetails = memberDetails ?? new MemberDetails { NickName = "Mr." };
+            var member = new Member { Name = name, IsOwner = isOwner, Code = Code, RelationShip = relationship, MemberDetails = memberDetails};
             member.MemberHistoriesList = new List<MemberHistory>();
             member.MemberHistoriesList.Add(new MemberHistory { Date = DateTime.Now, Title = "Added" });
             await _unitOfWork.Repository<Member>().AddItemAsync(member);
@@ -68,14 +69,12 @@ namespace Infrastructure.Services
             return Payments;
         }
 
-        public async Task<IReadOnlyList<Member>> GetMembersAsync()
+        public async Task<IReadOnlyList<Member>> GetMembersAsync(string memberName = null)
         {
-            return await _unitOfWork.Repository<Member>().GetAllAsync();
-        }
-
-        public async Task<IReadOnlyList<Member>> GetMembersByNameAsync(string memberName)
-        {
-            return await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(memberName.ToLower()), orderBy: x => x.OrderBy(y => y.Name));
+            if(string.IsNullOrWhiteSpace(memberName))
+                return await _unitOfWork.Repository<Member>().GetAllAsync();
+            else
+                return await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(memberName.ToLower()));
         }
 
         public async Task<IReadOnlyList<MemberVisitor>> GetMemberVisitorsAsync(string memberId)

@@ -36,9 +36,16 @@ namespace Nady.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Member>>> GetAllMembers()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IEnumerable<Member>> GetMembers([FromQuery] string name = null)
         {
-            return Ok(await _memberService.GetMembersAsync());
+
+            var members = await _memberService.GetMembersAsync(name);
+
+            return members;
+
+            //Logger.LogInfromation($"{DateTime.UtcNow.ToString("hh:mm:ss")}: Retrived {members}");
         }
 
         /// <summary>
@@ -59,23 +66,6 @@ namespace Nady.Controllers
         }
 
         /// <summary>
-        /// Get memeber by name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        [HttpGet("name/{name}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IReadOnlyList<Member>>> GetMemberByName(string name)
-        {
-            var members = await _memberService.GetMembersByNameAsync(name);
-
-            if (members == null) return NotFound(new ApiResponse(404));
-
-            return Ok(members);
-        }
-
-        /// <summary>
         /// Create a new member
         /// </summary>
         /// <param name="member"></param>
@@ -83,13 +73,14 @@ namespace Nady.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateMember([FromBody] Member member)
+        public async Task<ActionResult<Member>> CreateMember([FromBody] Member member)
         {
-            var result = await _memberService.CreateMemberAsync(member.Name, member.IsOwner, member.Code, member.RelationShip);
-            if (result != null) 
-                return Created("", result);
+            var result = await _memberService.CreateMemberAsync(member.Name, member.MemberDetails, member.IsOwner, member.Code, member.RelationShip);
+            if (result == null)
+                return BadRequest("Failed to Add Member");
 
-            return BadRequest("Failed to Add Member");
+
+            return CreatedAtAction(nameof(CreateMember), new { id = result.Id }, result);
 
         }
 
@@ -100,14 +91,14 @@ namespace Nady.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpadateMember(string id, [FromBody] Member value)
         {
             var member = await _memberService.GetMemberAsync(id);
             if (member == null) return NotFound(new ApiResponse(404));
             var result = await _memberService.UpdateMemberAsync(value);
-            if (result != null) return Ok(result);
+            if (result != null) return NoContent();
 
             return BadRequest("Failed to update");
         }
@@ -118,12 +109,12 @@ namespace Nady.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteMember(string id)
         {
             var result = await _memberService.DeleteMemberAsync(id);
-            if (result) return Ok(id);
+            if (result) return NoContent();
 
             return BadRequest("Problem deleting the message");
         }

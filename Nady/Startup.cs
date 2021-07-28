@@ -1,6 +1,7 @@
 using DataBase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Nady
 {
@@ -26,7 +29,14 @@ namespace Nady
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
+                options.OutputFormatters.Add(new SystemTextJsonOutputFormatter(new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                }));
+            });
             services.AddDbContext<IDatabaseContext, NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection"),
                 x => x.MigrationsAssembly(nameof(Infrastructure))));
             services.AddApplicationServices();

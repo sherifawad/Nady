@@ -15,7 +15,7 @@
             </summary>
             <param name="memberService"></param>
         </member>
-        <member name="M:Nady.Controllers.MembersController.GetAllMembers">
+        <member name="M:Nady.Controllers.MembersController.GetMembers(System.String)">
             <summary>
             Get all members
             </summary>
@@ -26,13 +26,6 @@
             Get memberBy Id
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Nady.Controllers.MembersController.GetMemberByName(System.String)">
-            <summary>
-            Get memeber by name
-            </summary>
-            <param name="name"></param>
             <returns></returns>
         </member>
         <member name="M:Nady.Controllers.MembersController.CreateMember(Core.Models.Member)">
