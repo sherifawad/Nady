@@ -38,7 +38,7 @@ namespace Nady.Controllers
         /// <param name="status">0 all, 1 used, 2 unused 3 suspend</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IEnumerable<MemberVisitor>> GetVisitores([FromQuery] string memberId = null , [FromQuery] int type = 0, [FromQuery] int status = 0)
+        public async Task<IEnumerable<MemberVisitor>> GetVisitoresAsync([FromQuery] string memberId = null , [FromQuery] int type = 0, [FromQuery] int status = 0)
         {
             return await _visitorService.GetVisitorsAsync(memberId, type, status);
                 
@@ -52,7 +52,7 @@ namespace Nady.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MemberVisitor>> GetVisitorById(string id)
+        public async Task<ActionResult<MemberVisitor>> GetVisitorByIdAsync(string id)
         {
             var visitor = await _visitorService.GetVisitorAsync(id);
 
@@ -70,7 +70,7 @@ namespace Nady.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<MemberVisitor>>> CreateVisitors([FromBody] MemberVisitor visitor, [FromQuery]int count = 1)
+        public async Task<ActionResult<IEnumerable<MemberVisitor>>> CreateVisitorsAsync([FromBody] MemberVisitor visitor, [FromQuery]int count = 1)
         {
             if(count > 1)
             {
@@ -79,7 +79,7 @@ namespace Nady.Controllers
                     return BadRequest("Failed to Create visitors");
 
 
-                return CreatedAtAction(nameof(GetVisitores), new { memberId = visitor.MemberId, type = ((int)visitor.VisitorType) }, createdVisitores);
+                return CreatedAtAction(nameof(GetVisitoresAsync), new { memberId = visitor.MemberId, type = ((int)visitor.VisitorType), status = ((int)visitor.VisitorStatus) }, createdVisitores);
             }
             else
             {
@@ -88,7 +88,7 @@ namespace Nady.Controllers
                     return BadRequest("Failed to Create a visitor");
 
 
-                return CreatedAtAction(nameof(GetVisitorById), new { id = createdVisitor.Id }, createdVisitor);
+                return CreatedAtAction(nameof(GetVisitorByIdAsync), new { id = createdVisitor.Id }, createdVisitor);
             }
 
         }
@@ -134,13 +134,14 @@ namespace Nady.Controllers
         /// </summary>
         /// <param name="memberId">member id</param>
         /// <param name="type">visitor type => 0 all, 1 Free, 2 Paid</param>
+        /// <param name="status">0 all, 1 used, 2 unused 3 suspend</param>
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(string memberId, int type = 0)
+        public async Task<IActionResult> Delete(string memberId, int type = 0, int status = 0)
         {
-            var result = await _visitorService.DeleteMemberVisitorAsync(memberId, type);
+            var result = await _visitorService.DeleteVisitorsAsync(memberId, type, status);
             if (result) return NoContent();
 
             return BadRequest("Problem deleting the member visitores");

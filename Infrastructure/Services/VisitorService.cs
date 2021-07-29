@@ -57,14 +57,10 @@ namespace Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> DeleteMemberVisitorAsync(string memberId, int type = 0)
+        public async Task<bool> DeleteVisitorsAsync(string memberId, int type = 0, int status = 0)
         {
 
-            var memberVisitors = type switch
-            {
-                0 => await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId, orderBy: y => y.OrderBy(y => y.AccessesDate)),
-                _ => await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId && ((int)x.VisitorType) == type, orderBy: y => y.OrderBy(y => y.AccessesDate))
-            };
+            var memberVisitors = await GetVisitorsAsync(memberId, type, status);
 
             if (memberVisitors == null) return false;
 

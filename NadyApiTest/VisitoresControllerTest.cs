@@ -30,7 +30,7 @@ namespace NadyApiTest
             var controller = new VisitoresController(visitorServiceStub.Object);
 
             // Act
-            var result = await controller.GetVisitores(type: 1);
+            var result = await controller.GetVisitoresAsync(type: 1);
 
             //Assert
             result.Should().BeEquivalentTo(expectedVisitors,
@@ -61,7 +61,7 @@ namespace NadyApiTest
             var controller = new VisitoresController(visitorServiceStub.Object);
 
             // Act
-            var result = await controller.GetVisitores(memberId);
+            var result = await controller.GetVisitoresAsync(memberId);
 
             //Assert
             result.Should().OnlyContain(
