@@ -1,6 +1,8 @@
 ﻿using Core.Interfaces;
 using Core.Models;
 using DataBase.UnitOfWork;
+using Infrastructure.Dtos;
+using Infrastructure.Extensions;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,10 +40,11 @@ namespace Nady.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<Member>> GetMembers([FromQuery] string name = null)
+        public async Task<IEnumerable<MemberDto>> GetMembers([FromQuery] string name = null, [FromQuery] string code = null)
         {
 
-            var members = await _memberService.GetMembersAsync(name);
+            var members = (await _memberService.GetMembersAsync(name, code))
+                .Select( x => x.AsDto());
 
             return members;
 
@@ -56,31 +59,32 @@ namespace Nady.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Member>> GetMemberById(string id)
+        public async Task<ActionResult<MemberDto>> GetMemberById(string id)
         {
             var member = await _memberService.GetMemberAsync(id);
 
             if (member == null) return NotFound(new ApiResponse(404));
 
-            return member;
+            return member.AsDto();
         }
 
         /// <summary>
         /// Create a new member
         /// </summary>
-        /// <param name="member"></param>
+        /// <param name="memberDto"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Member>> CreateMember([FromBody] Member member)
+        public async Task<ActionResult<MemberDto>> CreateMember([FromBody] MemberDto memberDto)
         {
-            var result = await _memberService.CreateMemberAsync(member.Name, member.MemberDetails, member.IsOwner, member.Code, member.RelationShip);
-            if (result == null)
+            var memberToCreate = memberDto.FromDto();
+            var createdMember = await _memberService.CreateMemberAsync(memberToCreate);
+            if (createdMember == null)
                 return BadRequest("Failed to Add Member");
 
 
-            return CreatedAtAction(nameof(GetMemberById), new { id = result.Id }, result);
+            return CreatedAtAction(nameof(GetMemberById), new { id = createdMember.Id }, createdMember.AsDto());
 
         }
 
@@ -93,12 +97,12 @@ namespace Nady.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpadateMember(string id, [FromBody] Member member)
+        public async Task<IActionResult> UpadateMember(string id, [FromBody] MemberDto memberDto)
         {
-            if (member.Id != id) return BadRequest("Failed to update");
+            if (memberDto.Id != id) return BadRequest("Failed to update");
             var memberToUpdate = await _memberService.GetMemberAsync(id);
             if (memberToUpdate == null) return NotFound(new ApiResponse(404));
-            var updatedMember = await _memberService.UpdateMemberAsync(member);
+            var updatedMember = await _memberService.UpdateMemberAsync(memberDto.FromDto());
             if (updatedMember != null) return NoContent();
 
             return BadRequest("Failed to update");

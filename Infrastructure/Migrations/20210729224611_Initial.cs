@@ -15,7 +15,7 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(nullable: false),
                     MemberStatus = table.Column<int>(nullable: false),
                     IsOwner = table.Column<bool>(nullable: false),
-                    Code = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: false),
                     RelationShip = table.Column<string>(nullable: true),
                     Note = table.Column<string>(nullable: true)
                 },
@@ -29,7 +29,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    NickName = table.Column<string>(nullable: true),
+                    NickName = table.Column<string>(nullable: false),
                     Phone = table.Column<string>(nullable: true),
                     Image = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true)

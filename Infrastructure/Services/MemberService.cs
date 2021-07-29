@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces;
 using Core.Models;
 using DataBase.UnitOfWork;
+using Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,10 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Member> CreateMemberAsync(string name, MemberDetails memberDetails, bool isOwner = false, string Code = null, string relationship = null)
+        public async Task<Member> CreateMemberAsync(Member member)
         {
-            var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+            var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower().Replace(" ", "") == member.Name.ToLower().Replace(" ", ""), track: false);
             if (DublicateName != null) return null;
-            memberDetails = memberDetails ?? new MemberDetails { NickName = "Mr." };
-            var member = new Member { Name = name, IsOwner = isOwner, Code = Code, RelationShip = relationship, MemberDetails = memberDetails};
-            member.MemberHistoriesList = new List<MemberHistory>();
             member.MemberHistoriesList.Add(new MemberHistory { Date = DateTime.Now, Title = "Added" });
             await _unitOfWork.Repository<Member>().AddItemAsync(member);
             // save to db
@@ -44,7 +42,7 @@ namespace Infrastructure.Services
 
         public async Task<Member> GetMemberAsync(string memberId)
         {
-            var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == memberId, $"{nameof(Member.MemberDetails)}");
+            var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == memberId, $"{nameof(Member.MemberDetails)}", false);
 
             if (member == null) return null;
 
@@ -69,12 +67,17 @@ namespace Infrastructure.Services
             return Payments;
         }
 
-        public async Task<IReadOnlyList<Member>> GetMembersAsync(string memberName = null)
+        public async Task<IReadOnlyList<Member>> GetMembersAsync(string memberName = null, string code = null)
         {
-            if(string.IsNullOrWhiteSpace(memberName))
-                return await _unitOfWork.Repository<Member>().GetAllAsync();
-            else
+            if(string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
+                return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()));
+            else if(!string.IsNullOrWhiteSpace(memberName) && string.IsNullOrWhiteSpace(code))
                 return await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(memberName.ToLower()));
+            else if(!string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
+                return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()) && x.Name.ToLower().Contains(memberName.ToLower()));
+
+            return await _unitOfWork.Repository<Member>().GetAllAsync();
+
         }
 
         public async Task<IReadOnlyList<MemberVisitor>> GetMemberVisitorsAsync(string memberId)

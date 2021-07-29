@@ -1,11 +1,14 @@
 using Core.Interfaces;
 using Core.Models;
 using FluentAssertions;
+using Infrastructure.Dtos;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Nady.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -49,7 +52,7 @@ namespace NadyApiTest
             var result = await controller.GetMemberById("Test");
 
             //Assert
-            result.Value.Should().BeEquivalentTo(expectedMember,
+            result.Value.FromDto().Should().BeEquivalentTo(expectedMember,
                 option => option.ComparingByMembers<Member>());
             //Assert.IsType<Member>(result.Value);
             //var member = (result as ActionResult<Member>).Value;
@@ -69,7 +72,7 @@ namespace NadyApiTest
 
             var expectedMembers = new[] { CreateRandomMember(), CreateRandomMember(), CreateRandomMember() };
 
-            memberServiceStub.Setup(service => service.GetMembersAsync(null))
+            memberServiceStub.Setup(service => service.GetMembersAsync(null, null))
                 .ReturnsAsync(expectedMembers);
 
             var controller = new MembersController(memberServiceStub.Object);
@@ -78,7 +81,7 @@ namespace NadyApiTest
             var result = await controller.GetMembers();
 
             //Assert
-            result.Should().BeEquivalentTo(expectedMembers,
+            result.Select(x => x.FromDto()).Should().BeEquivalentTo(expectedMembers,
                 option => option.ComparingByMembers<Member>());
         }
         
@@ -117,7 +120,7 @@ namespace NadyApiTest
                 }
             };
 
-            memberServiceStub.Setup(service => service.GetMembersAsync(nameToMatch))
+            memberServiceStub.Setup(service => service.GetMembersAsync(nameToMatch, null))
                 .ReturnsAsync(expectedembers);
 
             var controller = new MembersController(memberServiceStub.Object);
@@ -137,24 +140,22 @@ namespace NadyApiTest
         {
             // Arrange
 
-            var memberToCreate = CreateRandomMember();
+            var memberToCreateDto = CreateRandomMember().AsDto();
 
 
-            memberServiceStub.Setup(service => service.CreateMemberAsync(memberToCreate.Name,
-                memberToCreate.MemberDetails, memberToCreate.IsOwner, memberToCreate.Code,
-                memberToCreate.RelationShip))
-                .ReturnsAsync(memberToCreate);
+            memberServiceStub.Setup(service => service.CreateMemberAsync(memberToCreateDto.FromDto()))
+                .ReturnsAsync(memberToCreateDto.FromDto());
 
             var controller = new MembersController(memberServiceStub.Object);
 
             // Act
-            var result = await controller.CreateMember(memberToCreate);
+            var result = await controller.CreateMember(memberToCreateDto);
 
             //Assert
-            var createdMember = (result.Result as CreatedAtActionResult).Value as Member;
+            var createdMember = (result.Result as CreatedAtActionResult).Value as MemberDto;
 
-            memberToCreate.Should().BeEquivalentTo(createdMember,
-                option => option.ComparingByMembers<Member>().ExcludingMissingMembers());
+            memberToCreateDto.Should().BeEquivalentTo(createdMember,
+                option => option.ComparingByMembers<MemberDto>().ExcludingMissingMembers());
 
             createdMember.Id.Should().NotBeEmpty();
         }
@@ -185,7 +186,7 @@ namespace NadyApiTest
                 .ReturnsAsync(itemToUpdate);
 
             // Act
-            var result = await controller.UpadateMember(expectedMember.Id, itemToUpdate);
+            var result = await controller.UpadateMember(expectedMember.Id, itemToUpdate.AsDto());
 
             //Assert
 

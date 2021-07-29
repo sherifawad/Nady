@@ -6,8 +6,8 @@ namespace Core.Interfaces
 {
     public interface IMemberService
     {
-        Task<Member> CreateMemberAsync(string name, MemberDetails memberDetails, bool isOwner = false, string Code = null, string relationship = null);
-        Task<IReadOnlyList<Member>> GetMembersAsync(string memberName = null);
+        Task<Member> CreateMemberAsync(Member member);
+        Task<IReadOnlyList<Member>> GetMembersAsync(string memberName = null, string code = null);
         Task<Member> GetMemberAsync(string memberId);
         Task<IReadOnlyList<MemberPayment>> GetMemberPaymentAsync(string memberId);
         Task<IReadOnlyList<MemberHistory>> GetMemberHistoriesAsync(string memberId);

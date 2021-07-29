@@ -10,7 +10,8 @@ namespace Core.Models
     {
         [Key, ForeignKey(nameof(Member))]
         public new string Id { get; set; }
-        public string NickName { get; set; } = "Mister";
+        [Required]
+        public string NickName { get; set; }
         public string Phone { get; set; }
         public string Image { get; set; }
         public string Address { get; set; }

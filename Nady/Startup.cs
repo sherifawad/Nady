@@ -35,12 +35,12 @@ namespace Nady
         {
             services.AddControllers(options =>
             {
-                // fix json cycle
-                options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
-                options.OutputFormatters.Add(new SystemTextJsonOutputFormatter(new JsonSerializerOptions(JsonSerializerDefaults.Web)
-                {
-                    ReferenceHandler = ReferenceHandler.Preserve,
-                }));
+                //// fix json cycle
+                //options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
+                //options.OutputFormatters.Add(new SystemTextJsonOutputFormatter(new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                //{
+                //    ReferenceHandler = ReferenceHandler.Preserve,
+                //}));
 
                 // Fix error "No route matches the supplied values" when using async suffix in controlleres methods name 
                 options.SuppressAsyncSuffixInActionNames = false;

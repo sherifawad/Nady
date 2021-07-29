@@ -15,7 +15,7 @@
             </summary>
             <param name="memberService"></param>
         </member>
-        <member name="M:Nady.Controllers.MembersController.GetMembers(System.String)">
+        <member name="M:Nady.Controllers.MembersController.GetMembers(System.String,System.String)">
             <summary>
             Get all members
             </summary>
@@ -28,14 +28,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.MembersController.CreateMember(Core.Models.Member)">
+        <member name="M:Nady.Controllers.MembersController.CreateMember(Infrastructure.Dtos.MemberDto)">
             <summary>
             Create a new member
             </summary>
-            <param name="member"></param>
+            <param name="memberDto"></param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.MembersController.UpadateMember(System.String,Core.Models.Member)">
+        <member name="M:Nady.Controllers.MembersController.UpadateMember(System.String,Infrastructure.Dtos.MemberDto)">
             <summary>
             Update a member
             </summary>
