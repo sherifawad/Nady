@@ -18,6 +18,7 @@ namespace DataBase
         public DbSet<MemberHistory> MemberHistories { get; set; }
         public DbSet<MemberPayment> MemberPayments { get; set; }
         public DbSet<ScheduledPayment> ScheduledPayments { get; set; }
+        public DbSet<MemberVisitor> MemberVisitors { get; set; }
         public NadyDataContext(DbContextOptions<NadyDataContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

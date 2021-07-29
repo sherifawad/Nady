@@ -94,6 +94,29 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MemberVisitors",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    MemberId = table.Column<string>(nullable: false),
+                    VisitorType = table.Column<int>(nullable: false),
+                    AccessesDate = table.Column<DateTime>(nullable: true),
+                    VisitorStatus = table.Column<int>(nullable: false),
+                    Gate = table.Column<int>(nullable: false),
+                    Note = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberVisitors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MemberVisitors_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScheduledPayments",
                 columns: table => new
                 {
@@ -128,6 +151,11 @@ namespace Infrastructure.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MemberVisitors_MemberId",
+                table: "MemberVisitors",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScheduledPayments_MemberPaymentId",
                 table: "ScheduledPayments",
                 column: "MemberPaymentId");
@@ -140,6 +168,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "MemberHistories");
+
+            migrationBuilder.DropTable(
+                name: "MemberVisitors");
 
             migrationBuilder.DropTable(
                 name: "ScheduledPayments");

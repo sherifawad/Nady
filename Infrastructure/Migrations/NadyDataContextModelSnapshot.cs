@@ -140,6 +140,38 @@ namespace Infrastructure.Migrations
                     b.ToTable("MemberPayments");
                 });
 
+            modelBuilder.Entity("Core.Models.MemberVisitor", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("AccessesDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Gate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VisitorStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VisitorType")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("MemberVisitors");
+                });
+
             modelBuilder.Entity("Core.Models.ScheduledPayment", b =>
                 {
                     b.Property<string>("Id")
@@ -197,6 +229,15 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Models.Member", "Member")
                         .WithMany("MemberPayments")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Models.MemberVisitor", b =>
+                {
+                    b.HasOne("Core.Models.Member", "Member")
+                        .WithMany()
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

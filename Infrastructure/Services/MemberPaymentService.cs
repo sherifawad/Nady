@@ -48,7 +48,7 @@ namespace Infrastructure.Services
 
         public async Task<MemberPayment> GetPaymentAsync(string paymentId)
         {
-            var paymen = await _unitOfWork.Repository<MemberPayment>().GetFirstOrDefault(x => x.Id == paymentId);
+            var paymen = await _unitOfWork.Repository<MemberPayment>().GetFirstOrDefault(x => x.Id == paymentId, track: false);
 
             if (paymen == null) return null;
 

@@ -80,7 +80,7 @@ namespace Nady.Controllers
                 return BadRequest("Failed to Add Member");
 
 
-            return CreatedAtAction(nameof(CreateMember), new { id = result.Id }, result);
+            return CreatedAtAction(nameof(GetMemberById), new { id = result.Id }, result);
 
         }
 
@@ -88,17 +88,18 @@ namespace Nady.Controllers
         /// Update a member
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="value"></param>
+        /// <param name="member"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpadateMember(string id, [FromBody] Member value)
+        public async Task<IActionResult> UpadateMember(string id, [FromBody] Member member)
         {
-            var member = await _memberService.GetMemberAsync(id);
-            if (member == null) return NotFound(new ApiResponse(404));
-            var result = await _memberService.UpdateMemberAsync(value);
-            if (result != null) return NoContent();
+            if (member.Id != id) return BadRequest("Failed to update");
+            var memberToUpdate = await _memberService.GetMemberAsync(id);
+            if (memberToUpdate == null) return NotFound(new ApiResponse(404));
+            var updatedMember = await _memberService.UpdateMemberAsync(member);
+            if (updatedMember != null) return NoContent();
 
             return BadRequest("Failed to update");
         }

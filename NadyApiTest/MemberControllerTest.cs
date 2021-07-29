@@ -15,6 +15,7 @@ namespace NadyApiTest
     {
         private readonly Mock<IMemberService> memberServiceStub = new Mock<IMemberService>();
         private readonly Random rand = new Random();
+
         [Fact]
         public async Task GetMemberById_WithUnExistingMember_ReturnNotFound()
         {
