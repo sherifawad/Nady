@@ -19,26 +19,14 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<MemberVisitor> CreateVisitorAsync(string memberId, VisitorType visitorType, Gate gate, VisitorStatus status = VisitorStatus.UnUsed, DateTime? accessDate = null, string note = null)
+        public async Task<IReadOnlyList<MemberVisitor>> CreateVisitorsAsync(MemberVisitor visitor, int count = 1)
         {
-            var member = await _unitOfWork.Repository<Member>().FindAsync(memberId);
-            if (member is null) return null;
-
-            var visitor = new MemberVisitor { MemberId = memberId, AccessesDate = accessDate, Gate = gate, Note = note, VisitorStatus = status, VisitorType = visitorType};
-            await _unitOfWork.Repository<MemberVisitor>().AddItemAsync(visitor);
-            // save to db
-            if (await _unitOfWork.Complete()) return visitor;
-            return null;
-        }
-        public async Task<IReadOnlyList<MemberVisitor>> CreateVisitorsAsync(string memberId, VisitorType visitorType, int count,string note = null)
-        {
-            var member = await _unitOfWork.Repository<Member>().FindAsync(memberId);
+            var member = await _unitOfWork.Repository<Member>().FindAsync(visitor?.MemberId);
             if (member is null) return null;
             var list = new List<MemberVisitor>();
 
             for (int i = 0; i < count; i++)
             {
-                var visitor = new MemberVisitor { MemberId = memberId, Note = note, VisitorType = visitorType, VisitorStatus = VisitorStatus.UnUsed};
                 await _unitOfWork.Repository<MemberVisitor>().AddItemAsync(visitor);
                 list.Add(visitor);
             }

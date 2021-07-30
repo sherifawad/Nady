@@ -11,6 +11,10 @@ namespace DataBase.Configuration
     {
         public static void ApplyDataFixForSqlite(this ModelBuilder modelBuilder)
         {
+            var converter = new ValueConverter<DateTimeOffset, long>(
+                            dateTimeOffset => dateTimeOffset.ToUnixTimeMilliseconds(),
+                            unixTime => DateTimeOffset.FromUnixTimeMilliseconds(unixTime).ToLocalTime());
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
@@ -24,7 +28,8 @@ namespace DataBase.Configuration
 
                 foreach (var property in dateTimeProperties)
                 {
-                    modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion(new DateTimeToBinaryConverter());
+                    //modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion(new DateTimeToBinaryConverter());
+                    modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion(converter);
                 }
             }
         }

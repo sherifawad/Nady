@@ -72,24 +72,13 @@ namespace Nady.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<MemberVisitor>>> CreateVisitorsAsync([FromBody] MemberVisitor visitor, [FromQuery]int count = 1)
         {
-            if(count > 1)
-            {
-                var createdVisitores = await _visitorService.CreateVisitorsAsync(visitor.MemberId, visitor.VisitorType, count, visitor.Note);
-                if (createdVisitores == null)
-                    return BadRequest("Failed to Create visitors");
-
-
+            var createdVisitores = await _visitorService.CreateVisitorsAsync(visitor, count);
+            if (createdVisitores == null)
+                return BadRequest("Failed to Create visitors");
+            if (count > 1)
                 return CreatedAtAction(nameof(GetVisitoresAsync), new { memberId = visitor.MemberId, type = ((int)visitor.VisitorType), status = ((int)visitor.VisitorStatus) }, createdVisitores);
-            }
             else
-            {
-                var createdVisitor = await _visitorService.CreateVisitorAsync(visitor.MemberId, visitor.VisitorType, visitor.Gate, visitor.VisitorStatus, visitor.AccessesDate, visitor.Note);
-                if (createdVisitor == null)
-                    return BadRequest("Failed to Create a visitor");
-
-
-                return CreatedAtAction(nameof(GetVisitorByIdAsync), new { id = createdVisitor.Id }, createdVisitor);
-            }
+                return CreatedAtAction(nameof(GetVisitorByIdAsync), new { id = createdVisitores[0].Id }, createdVisitores[0]);
 
         }
 

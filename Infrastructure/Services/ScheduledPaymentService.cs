@@ -18,12 +18,11 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<ScheduledPayment> CreateScheduledPaymentAsync(string memberPaymentId, string name, PaymentMethod paymentMethod, DateTime dueDate, decimal total, DateTime? fulfilledDate, bool fulfilled = false, string note = null)
+        public async Task<ScheduledPayment> CreateScheduledPaymentAsync(ScheduledPayment scheduledPayment)
         {
-            var payment = new ScheduledPayment { MemberPaymentId = memberPaymentId, Fulfiled = fulfilled, FulfiledDate = fulfilledDate, PaymentMethod = paymentMethod, PaymentDueDate = dueDate};
-            await _unitOfWork.Repository<ScheduledPayment>().AddItemAsync(payment);
+            await _unitOfWork.Repository<ScheduledPayment>().AddItemAsync(scheduledPayment);
             // save to db
-            if (await _unitOfWork.Complete()) return payment;
+            if (await _unitOfWork.Complete()) return scheduledPayment;
             return null;
         }
 

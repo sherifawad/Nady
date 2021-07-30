@@ -22,7 +22,8 @@ namespace Infrastructure.Services
         {
             var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower().Replace(" ", "") == member.Name.ToLower().Replace(" ", ""), track: false);
             if (DublicateName != null) return null;
-            member.MemberHistoriesList.Add(new MemberHistory { Date = DateTime.Now, Title = "Added" });
+            member.MemberHistoriesList.Add(new MemberHistory { Date = DateTimeOffset.Now, Title = "Added" });
+            member.Name = member.Name.Trim();
             await _unitOfWork.Repository<Member>().AddItemAsync(member);
             // save to db
             if (await _unitOfWork.Complete()) return member;

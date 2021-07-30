@@ -79,7 +79,7 @@ namespace NadyApiTest
                 Id = Guid.NewGuid().ToString(),
                 MemberId = memId,
                 VisitorStatus = status,
-                AccessesDate = new DateTime(2020, rand.Next(1,12), rand.Next(1,29)),
+                AccessesDate = new DateTimeOffset(new DateTime(2020, rand.Next(1,12), rand.Next(1,29))),
                 VisitorType = type,
                 Note = null
             };

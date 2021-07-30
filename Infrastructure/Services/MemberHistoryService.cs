@@ -17,9 +17,8 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<MemberHistory> CreateHistoryAsync(string memberId, string title, DateTime date, string detail = null)
+        public async Task<MemberHistory> CreateHistoryAsync(MemberHistory history)
         {
-            var history = new MemberHistory {MemberId = memberId, Title = title, Date = date, Detail = detail};
             await _unitOfWork.Repository<MemberHistory>().AddItemAsync(history);
             // save to db
             if (await _unitOfWork.Complete()) return history;

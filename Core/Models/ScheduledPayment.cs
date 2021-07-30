@@ -14,8 +14,8 @@ namespace Core.Models
         [Required]
         public decimal PaymentAmount { get; set; }
         [Required]
-        public DateTime PaymentDueDate { get; set; }
-        public DateTime? FulfiledDate { get; set; }
+        public DateTimeOffset PaymentDueDate { get; set; }
+        public DateTimeOffset? FulfiledDate { get; set; }
         public bool Fulfiled { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
 

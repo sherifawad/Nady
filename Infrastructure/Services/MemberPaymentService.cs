@@ -18,9 +18,8 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<MemberPayment> CreatePaymentAsync(string memberId, string name, PaymentType paymentType, DateTime date, decimal total, decimal paymentAmount, bool isScheduled = false, double taxPercentage = 0, double discountPercentage = 0, string note = null)
+        public async Task<MemberPayment> CreatePaymentAsync(MemberPayment payment)
         {
-            var payment = new MemberPayment { MemberId = memberId, DiscountPercentage = discountPercentage, IsScheduled = isScheduled, Name = name, Note = note, PaymentAmount = paymentAmount, PaymentTotal = total, TaxPercentage = taxPercentage };
             await _unitOfWork.Repository<MemberPayment>().AddItemAsync(payment);
             // save to db
             if (await _unitOfWork.Complete()) return payment;

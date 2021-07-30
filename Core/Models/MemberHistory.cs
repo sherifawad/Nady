@@ -13,7 +13,7 @@ namespace Core.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; } 
         public string Detail { get; set; }
 
         public virtual Member Member { get; set; }

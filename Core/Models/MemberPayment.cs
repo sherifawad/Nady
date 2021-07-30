@@ -19,7 +19,7 @@ namespace Core.Models
         public double TaxPercentage { get; set; }
         public double DiscountPercentage { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
         public string Note { get; set; }
         public virtual IEnumerable<ScheduledPayment> ScheduledPayments { get; set; } = new List<ScheduledPayment>();
 

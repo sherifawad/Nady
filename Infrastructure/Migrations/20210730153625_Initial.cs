@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
@@ -52,7 +51,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<string>(nullable: false),
                     MemberId = table.Column<string>(nullable: false),
                     Title = table.Column<string>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
+                    Date = table.Column<long>(nullable: false),
                     Detail = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -79,7 +78,7 @@ namespace Infrastructure.Migrations
                     PaymentTotal = table.Column<double>(nullable: false),
                     TaxPercentage = table.Column<double>(nullable: false),
                     DiscountPercentage = table.Column<double>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
+                    Date = table.Column<long>(nullable: false),
                     Note = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -100,9 +99,9 @@ namespace Infrastructure.Migrations
                     Id = table.Column<string>(nullable: false),
                     MemberId = table.Column<string>(nullable: false),
                     VisitorType = table.Column<int>(nullable: false),
-                    AccessesDate = table.Column<DateTime>(nullable: true),
+                    AccessesDate = table.Column<long>(nullable: true),
                     VisitorStatus = table.Column<int>(nullable: false),
-                    Gate = table.Column<int>(nullable: false),
+                    Gate = table.Column<int>(nullable: true),
                     Note = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -123,8 +122,8 @@ namespace Infrastructure.Migrations
                     Id = table.Column<string>(nullable: false),
                     MemberPaymentId = table.Column<string>(nullable: false),
                     PaymentAmount = table.Column<double>(nullable: false),
-                    PaymentDueDate = table.Column<DateTime>(nullable: false),
-                    FulfiledDate = table.Column<DateTime>(nullable: true),
+                    PaymentDueDate = table.Column<long>(nullable: false),
+                    FulfiledDate = table.Column<long>(nullable: true),
                     Fulfiled = table.Column<bool>(nullable: false),
                     PaymentMethod = table.Column<int>(nullable: false),
                     Note = table.Column<string>(nullable: true)

@@ -13,10 +13,10 @@ namespace Core.Models
         public string MemberId { get; set; }
         [Required]
         public VisitorType VisitorType { get; set; }
-        public DateTime? AccessesDate { get; set; }
+        public DateTimeOffset? AccessesDate { get; set; }
         [Required]
         public VisitorStatus VisitorStatus { get; set; }
-        public Gate Gate { get; set; }
+        public Gate? Gate { get; set; }
         public string Note { get; set; }
         public virtual Member Member { get; set; }
     }

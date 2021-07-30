@@ -8,7 +8,7 @@ namespace Core.Interfaces
 {
     public interface IScheduledPaymentService
     {
-        Task<ScheduledPayment> CreateScheduledPaymentAsync(string memberPaymentId, string name, PaymentMethod paymentMethod, DateTime dueDate, decimal total, DateTime? fulfilledDate, bool fulfilled = false, string note = null);
+        Task<ScheduledPayment> CreateScheduledPaymentAsync(ScheduledPayment scheduledPayment);
         Task<IReadOnlyList<ScheduledPayment>> GetScheduledPaymentsAsync();
         Task<ScheduledPayment> GetScheduledPaymentAsync(string scheduledPaymentId);
         Task<IReadOnlyList<ScheduledPayment>> GetScheduledPaymentsAsync(string paymentId);
