@@ -9,10 +9,9 @@ namespace Core.Interfaces
     public interface IMemberHistoryService
     {
         Task<MemberHistory> CreateHistoryAsync(MemberHistory history);
-        Task<IReadOnlyList<MemberHistory>> GetHistoriesAsync();
+        Task<IReadOnlyList<MemberHistory>> GetHistoriesAsync(string memberId, string title, DateTimeOffset? startDate, DateTimeOffset? endDate);
         Task<MemberHistory> GetHistoryAsync(string historyId);
-        Task<IReadOnlyList<MemberHistory>> GetMemberHistoriesAsync(string memberId);
         Task<MemberHistory> UpdateHistoryAsync(MemberHistory history);
-        Task<bool> DeleteMemberAsync(string historyId);
+        Task<bool> DeleteHistoryAsync(string historyId);
     }
 }

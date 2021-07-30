@@ -4,6 +4,56 @@
         <name>Nady</name>
     </assembly>
     <members>
+        <member name="T:Nady.Controllers.HistoryController">
+            <summary>
+            Members Controllers
+            </summary>
+        </member>
+        <member name="M:Nady.Controllers.HistoryController.#ctor(Core.Interfaces.IMemberHistoryService)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="historyService"></param>
+        </member>
+        <member name="M:Nady.Controllers.HistoryController.GetHistoriesAsync(System.String,System.String,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
+            <summary>
+            Get all histories 
+            </summary>
+            <param name="memberId">Member Id</param>
+            <param name="title">History title </param>
+            <param name="startDate">Histories start</param>
+            <param name="endDate">Histories End</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.HistoryController.GetHistoryById(System.String)">
+            <summary>
+            Get History  rBy Id
+            </summary>
+            <param name="id">History Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.HistoryController.CreateHistory(Infrastructure.Dtos.MemberHistoryDto)">
+            <summary>
+            Create a new history
+            </summary>
+            <param name="historyDto">History to create</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.HistoryController.UpadateHistory(System.String,Infrastructure.Dtos.MemberHistoryDto)">
+            <summary>
+            Update a hisotry
+            </summary>
+            <param name="id"></param>
+            <param name="historyDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nady.Controllers.HistoryController.DeleteHistory(System.String)">
+            <summary>
+            Delete a history
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:Nady.Controllers.MembersController">
             <summary>
             Members Controllers

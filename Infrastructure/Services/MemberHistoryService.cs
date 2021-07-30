@@ -25,7 +25,7 @@ namespace Infrastructure.Services
             return null;
         }
 
-        public async Task<bool> DeleteMemberAsync(string historyId)
+        public async Task<bool> DeleteHistoryAsync(string historyId)
         {
             var history = await _unitOfWork.Repository<MemberHistory>().GetFirstOrDefault(x => x.Id == historyId);
             if (history == null) return false;
@@ -35,27 +35,24 @@ namespace Infrastructure.Services
             return false;
         }
 
-        public async Task<IReadOnlyList<MemberHistory>> GetHistoriesAsync()
+        public async Task<IReadOnlyList<MemberHistory>> GetHistoriesAsync(string memberId, string title, DateTimeOffset? startDate, DateTimeOffset? endDate)
         {
-            return await _unitOfWork.Repository<MemberHistory>().GetAllAsync();
+            return await _unitOfWork.Repository<MemberHistory>().Get(x => 
+            (!string.IsNullOrWhiteSpace(memberId) ?  x.MemberId == memberId : true) &&
+            (!string.IsNullOrWhiteSpace(title) ? x.Title.ToLower().Contains(title.ToLower()) : true)  &&
+            (startDate != null ? x.Date >= startDate : true) &&
+            (endDate != null ? x.Date <= endDate : true) ,
+            orderBy: x => x.OrderBy(y => y.Date), track: false);
+
         }
 
         public async Task<MemberHistory> GetHistoryAsync(string historyId)
         {
-            var history = await _unitOfWork.Repository<MemberHistory>().GetFirstOrDefault(x => x.Id == historyId);
+            var history = await _unitOfWork.Repository<MemberHistory>().GetFirstOrDefault(x => x.Id == historyId, track:false);
 
             if (history == null) return null;
 
             return history;
-        }
-
-        public async Task<IReadOnlyList<MemberHistory>> GetMemberHistoriesAsync(string memberId)
-        {
-            var histories = await _unitOfWork.Repository<MemberHistory>().Get(x => x.MemberId == memberId, orderBy: x => x.OrderBy(y => y.Date));
-
-            if (histories == null) return null;
-
-            return histories;
         }
 
         public async Task<MemberHistory> UpdateHistoryAsync(MemberHistory history)

@@ -1,14 +1,14 @@
-﻿using Core.Models.Enum;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Core.Models
+namespace Infrastructure.Dtos
 {
-    public class ScheduledPayment : BaseModel
+    public class ScheduledPaymentDto
     {
+        [Required]
+        public string Id { get; set; }
         [Required]
         public string MemberPaymentId { get; set; }
         [Required]
@@ -17,9 +17,7 @@ namespace Core.Models
         public DateTimeOffset PaymentDueDate { get; set; }
         public DateTimeOffset? FulfiledDate { get; set; }
         public bool Fulfiled { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
+        public int PaymentMethod { get; set; }
         public string Note { get; set; }
-
-        public virtual MemberPayment MemberPayment { get; set; }
     }
 }
