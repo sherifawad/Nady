@@ -39,6 +39,7 @@ namespace Infrastructure.Extensions
                 RelationShip = memberDto.RelationShip,
                 MemberDetails = new MemberDetails
                 {
+                    Id = memberDto.Id,
                     Address = memberDto.Address,
                     Image = memberDto.Image,
                     NickName = memberDto.NickName,

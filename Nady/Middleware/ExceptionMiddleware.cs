@@ -34,7 +34,8 @@ namespace Nady.Middleware
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = _env.IsDevelopment()
-                    ? new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
+                    ? new ApiException((int)HttpStatusCode.InternalServerError, ex.InnerException != null? ex.InnerException.Message : ex.Message,
+                    ex.InnerException != null ? ex.InnerException.StackTrace.ToString() : ex.StackTrace.ToString())
                     : new ApiException((int)HttpStatusCode.InternalServerError, ex.Message);
 
                 var options = new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
