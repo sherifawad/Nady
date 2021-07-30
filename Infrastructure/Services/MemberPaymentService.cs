@@ -36,15 +36,6 @@ namespace Infrastructure.Services
             return false;
         }
 
-        public async Task<IReadOnlyList<MemberPayment>> GetMemberPaymentsAsync(string memberId)
-        {
-            var payments = await _unitOfWork.Repository<MemberPayment>().Get(x => x.MemberId == memberId, orderBy: x => x.OrderBy(y => y.Date));
-
-            if (payments == null) return null;
-
-            return payments;
-        }
-
         public async Task<MemberPayment> GetPaymentAsync(string paymentId)
         {
             var paymen = await _unitOfWork.Repository<MemberPayment>().GetFirstOrDefault(x => x.Id == paymentId, track: false);
@@ -54,9 +45,30 @@ namespace Infrastructure.Services
             return paymen;
         }
 
-        public async Task<IReadOnlyList<MemberPayment>> GetPaymentsAsync()
+        public async Task<IReadOnlyList<MemberPayment>> GetPaymentsAsync(
+            string memberId = null,
+            string name = null,
+            bool? isScheduled = null,
+            int? paymentType = null,
+            decimal? paymentAmount = null,
+            decimal? paymentTotal = null,
+            double? taxPercentage = null,
+            double? discountPercentage = null,
+            DateTimeOffset? startDate = null,
+            DateTimeOffset? endDate = null)
         {
-            return await _unitOfWork.Repository<MemberPayment>().GetAllAsync();
+            return await _unitOfWork.Repository<MemberPayment>().Get(x =>
+                (!string.IsNullOrWhiteSpace(memberId) ? x.MemberId == memberId : true) &&
+                (!string.IsNullOrWhiteSpace(name) ? x.Name.ToLower().Contains(name.ToLower()) : true) &&
+                (isScheduled != null ? x.IsScheduled == isScheduled : true) &&
+                (paymentType != null ? x.PaymentType == (PaymentType)paymentType : true) &&
+                (paymentAmount != null ? x.PaymentAmount == paymentAmount : true) &&
+                (paymentTotal != null ? x.PaymentTotal == paymentTotal : true) &&
+                (taxPercentage != null ? x.TaxPercentage == taxPercentage : true) &&
+                (discountPercentage != null ? x.DiscountPercentage == discountPercentage : true) &&
+                (startDate != null ? x.Date >= startDate : true) &&
+                (endDate != null ? x.Date <= endDate : true), 
+                orderBy: x => x.OrderBy(y => y.Date), track: false);
         }
 
         public async Task<MemberPayment> UpdatePaymentAsync(MemberPayment payment)

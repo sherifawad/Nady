@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace Nady.Controllers
 {
     /// <summary>
-    /// Members Controllers
+    /// History Controllers
     /// </summary>
     public class HistoryController : BaseApiController
     {
@@ -123,7 +123,7 @@ namespace Nady.Controllers
             var result = await _historyService.DeleteHistoryAsync(id);
             if (result) return NoContent();
 
-            return BadRequest("Problem deleting the message");
+            return BadRequest("Problem deleting the history");
         }
     }
 }

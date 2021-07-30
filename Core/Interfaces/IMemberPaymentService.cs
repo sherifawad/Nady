@@ -9,9 +9,18 @@ namespace Core.Interfaces
     public interface IMemberPaymentService
     {
         Task<MemberPayment> CreatePaymentAsync(MemberPayment payment);
-        Task<IReadOnlyList<MemberPayment>> GetPaymentsAsync();
+        Task<IReadOnlyList<MemberPayment>> GetPaymentsAsync(
+            string memberId = null,
+            string name = null,
+            bool? isScheduled = null,
+            int? paymentType = null,
+            decimal? paymentAmount = null,
+            decimal? paymentTotal = null,
+            double? taxPercentage = null,
+            double? discountPercentage = null,
+            DateTimeOffset? startDate = null,
+            DateTimeOffset? endDate = null);
         Task<MemberPayment> GetPaymentAsync(string paymentId);
-        Task<IReadOnlyList<MemberPayment>> GetMemberPaymentsAsync(string memberId);
         Task<MemberPayment> UpdatePaymentAsync(MemberPayment payment);
         Task<bool> DeletePaymentAsync(string paymentId);
     }
