@@ -75,10 +75,15 @@ namespace Nady
             //AddSqlite Check for database is health 
 
             services.AddHealthChecks()
-                .AddSqlite(sqliteConnectionString: _Configuration.GetConnectionString("DefaultConnection"),
-                name:"Sqlite",
-                timeout:TimeSpan.FromSeconds(3),
-                tags: new[] { "ready"});
+                //.AddSqlite(sqliteConnectionString: _Configuration.GetConnectionString("DefaultConnection"),
+                //healthQuery: "SELECT 1;",
+                //name: "Sqlite",
+                //timeout: TimeSpan.FromSeconds(3),
+                //tags: new[] { "ready" })
+                .AddCheck<DatabaseHealthCheck>(
+                name: "Sqlite",
+                timeout: TimeSpan.FromSeconds(3),
+                tags: new[] { "ready" });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
