@@ -7,7 +7,6 @@ namespace Infrastructure.Dtos
 {
     public class ScheduledPaymentDto
     {
-        [Required]
         [MaxLength(66)]
         public string Id { get; set; }
         [Required]

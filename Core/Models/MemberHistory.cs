@@ -15,7 +15,7 @@ namespace Core.Models
         [MaxLength(100)]
         public string Title { get; set; }
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
         [MaxLength(200)]
         public string Detail { get; set; }
 

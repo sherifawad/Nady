@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Migrations
 {
-    public partial class IntialDbCreation : Migration
+    public partial class InitialCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -75,10 +75,9 @@ namespace Infrastructure.Migrations
                     IsScheduled = table.Column<bool>(nullable: false),
                     PaymentType = table.Column<int>(nullable: false),
                     PaymentMethod = table.Column<int>(nullable: true),
-                    PaymentAmount = table.Column<double>(nullable: false),
                     PaymentTotal = table.Column<double>(nullable: false),
-                    TaxPercentage = table.Column<double>(nullable: false),
-                    DiscountPercentage = table.Column<double>(nullable: false),
+                    TaxPercentage = table.Column<double>(nullable: true),
+                    DiscountPercentage = table.Column<double>(nullable: true),
                     Date = table.Column<long>(nullable: false),
                     Note = table.Column<string>(maxLength: 200, nullable: true)
                 },

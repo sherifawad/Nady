@@ -78,11 +78,23 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.MembersController.CreateMember(Infrastructure.Dtos.MemberDto)">
+        <member name="M:Nady.Controllers.MembersController.CreateMember(Infrastructure.Dtos.MemberDto,System.Boolean,System.Int32,System.Nullable{System.Int32},System.Decimal,System.Decimal,System.Double,System.Double,System.DateTimeOffset,System.String,System.Decimal,System.Int32)">
             <summary>
-            Create a new member
+            Create A member
             </summary>
             <param name="memberDto"></param>
+            <param name="price"></param>
+            <param name="isScheduled"></param>
+            <param name="type"></param>
+            <param name="method"></param>
+            <param name="amount"></param>
+            <param name="total"></param>
+            <param name="tax"></param>
+            <param name="discount"></param>
+            <param name="date"></param>
+            <param name="note"></param>
+            <param name="scheduledpaymenamount"></param>
+            <param name="scheduledevery"></param>
             <returns></returns>
         </member>
         <member name="M:Nady.Controllers.MembersController.UpadateMember(System.String,Infrastructure.Dtos.MemberDto)">

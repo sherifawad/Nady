@@ -17,13 +17,12 @@ namespace Core.Models
         [Required]
         public PaymentType PaymentType { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
-        public decimal PaymentAmount { get; set; }
         [Required]
         public decimal PaymentTotal { get; set; }
-        public double TaxPercentage { get; set; }
-        public double DiscountPercentage { get; set; }
+        public double? TaxPercentage { get; set; }
+        public double? DiscountPercentage { get; set; }
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
         [MaxLength(200)]
         public string Note { get; set; }
         public virtual IEnumerable<ScheduledPayment> ScheduledPayments { get; set; } = new List<ScheduledPayment>();

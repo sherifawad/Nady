@@ -8,7 +8,6 @@ namespace Infrastructure.Dtos
     public class MemberHistoryDto
     {
 
-        [Required]
         [MaxLength(66)]
         public string Id { get; set; }
         [Required]
@@ -18,7 +17,7 @@ namespace Infrastructure.Dtos
         [MaxLength(100)]
         public string Title { get; set; }
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
         [MaxLength(200)]
         public string Detail { get; set; }
 

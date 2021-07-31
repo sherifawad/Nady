@@ -8,7 +8,6 @@ namespace Infrastructure.Dtos
 {
     public class MemberDto
     {
-        [Required]
         [MaxLength(66)]
         public string Id { get; set; }
         [Required]

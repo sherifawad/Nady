@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Core.Models.Enum;
 using DataBase.UnitOfWork;
 using Infrastructure.Dtos;
 using Infrastructure.Extensions;
@@ -69,17 +70,42 @@ namespace Nady.Controllers
         }
 
         /// <summary>
-        /// Create a new member
+        /// Create A member
         /// </summary>
         /// <param name="memberDto"></param>
+        /// <param name="price"></param>
+        /// <param name="isScheduled"></param>
+        /// <param name="type"></param>
+        /// <param name="method"></param>
+        /// <param name="amount"></param>
+        /// <param name="total"></param>
+        /// <param name="tax"></param>
+        /// <param name="discount"></param>
+        /// <param name="date"></param>
+        /// <param name="note"></param>
+        /// <param name="scheduledpaymenamount"></param>
+        /// <param name="scheduledevery"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<MemberDto>> CreateMember([FromBody] MemberDto memberDto)
+        public async Task<ActionResult<MemberDto>> CreateMember([FromBody] MemberDto memberDto, 
+            [FromQuery]bool isScheduled,
+            [FromQuery] int type,
+            [FromQuery] int? method,
+            [FromQuery] decimal amount,
+            [FromQuery] decimal total,
+            [FromQuery] double tax,
+            [FromQuery] double discount,
+            [FromQuery] DateTimeOffset date,
+            [FromQuery] string note,
+            [FromQuery] decimal scheduledpaymenamount,
+            [FromQuery] int scheduledevery
+            )
         {
+
             var memberToCreate = memberDto.FromDto();
-            var createdMember = await _memberService.CreateMemberAsync(memberToCreate);
+            var createdMember = await _memberService.CreateMemberAsync(memberToCreate, isScheduled, type, method, amount, total, tax, discount, date, note, scheduledpaymenamount, scheduledevery);
             if (createdMember == null)
                 return BadRequest("Failed to Add Member");
 

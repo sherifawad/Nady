@@ -66,7 +66,6 @@ namespace Infrastructure.Services
                 (isScheduled != null ? x.IsScheduled == isScheduled : true) &&
                 (paymentType != null ? x.PaymentType == (PaymentType)paymentType : true) &&
                 (paymentMethod != null ? x.PaymentMethod == (PaymentMethod)paymentMethod : true) &&
-                (paymentAmount != null ? x.PaymentAmount == paymentAmount : true) &&
                 (paymentTotal != null ? x.PaymentTotal == paymentTotal : true) &&
                 (taxPercentage != null ? x.TaxPercentage == taxPercentage : true) &&
                 (discountPercentage != null ? x.DiscountPercentage == discountPercentage : true) &&

@@ -8,7 +8,6 @@ namespace Infrastructure.Dtos
 {
     public class MemberPaymentDto
     {
-        [Required]
         [MaxLength(66)]
         public string Id { get; set; }
         [Required]
@@ -21,13 +20,12 @@ namespace Infrastructure.Dtos
         [Required]
         public int PaymentType { get; set; }
         public int? PaymentMethod { get; set; }
-        public decimal PaymentAmount { get; set; }
         [Required]
         public decimal PaymentTotal { get; set; }
-        public double TaxPercentage { get; set; }
-        public double DiscountPercentage { get; set; }
+        public double? TaxPercentage { get; set; }
+        public double? DiscountPercentage { get; set; }
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
         [MaxLength(200)]
         public string Note { get; set; }
     }

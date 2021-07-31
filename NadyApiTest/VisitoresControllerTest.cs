@@ -2,11 +2,12 @@
 using Core.Models;
 using Core.Models.Enum;
 using FluentAssertions;
+using Infrastructure.Extensions;
 using Moq;
 using Nady.Controllers;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -32,9 +33,10 @@ namespace NadyApiTest
             // Act
             var result = await controller.GetVisitoresAsync(type: 1);
 
+            var visitores = result.Select(x => x.FromDto());
             //Assert
-            result.Should().BeEquivalentTo(expectedVisitors,
-                option => option.ComparingByMembers<MemberVisitor>());
+            visitores.Should().BeEquivalentTo(expectedVisitors,
+                option => option.ComparingByMembers<MemberVisitor>().ExcludingMissingMembers());
         }
 
         [Fact]
@@ -81,7 +83,9 @@ namespace NadyApiTest
                 VisitorStatus = status,
                 AccessesDate = new DateTimeOffset(new DateTime(2020, rand.Next(1,12), rand.Next(1,29))),
                 VisitorType = type,
-                Note = null
+                Note = "note",
+                Member = null,
+                Gate = null
             };
         }
     }
