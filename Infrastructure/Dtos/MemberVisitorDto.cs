@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Core.Models.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Infrastructure.Dtos
 {
-    public class MemberHistoryDto
+    public class MemberVisitorDto
     {
-
         [Required]
         [MaxLength(66)]
         public string Id { get; set; }
@@ -15,12 +15,12 @@ namespace Infrastructure.Dtos
         [MaxLength(66)]
         public string MemberId { get; set; }
         [Required]
-        [MaxLength(100)]
-        public string Title { get; set; }
+        public int VisitorType { get; set; }
+        public DateTimeOffset? AccessesDate { get; set; }
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public int VisitorStatus { get; set; }
+        public int? Gate { get; set; }
         [MaxLength(200)]
-        public string Detail { get; set; }
-
+        public string Note { get; set; }
     }
 }

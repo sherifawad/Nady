@@ -9,7 +9,8 @@ namespace Core.Models
 {
     public class MemberVisitor : BaseModel
     {
-        [Required] 
+        [Required]
+        [MaxLength(66)]
         public string MemberId { get; set; }
         [Required]
         public VisitorType VisitorType { get; set; }
@@ -17,6 +18,7 @@ namespace Core.Models
         [Required]
         public VisitorStatus VisitorStatus { get; set; }
         public Gate? Gate { get; set; }
+        [MaxLength(200)]
         public string Note { get; set; }
         public virtual Member Member { get; set; }
     }

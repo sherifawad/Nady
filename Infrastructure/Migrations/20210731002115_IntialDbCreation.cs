@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Migrations
 {
-    public partial class Initial : Migration
+    public partial class IntialDbCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,13 +10,13 @@ namespace Infrastructure.Migrations
                 name: "Members",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 66, nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     MemberStatus = table.Column<int>(nullable: false),
                     IsOwner = table.Column<bool>(nullable: false),
-                    Code = table.Column<string>(nullable: false),
-                    RelationShip = table.Column<string>(nullable: true),
-                    Note = table.Column<string>(nullable: true)
+                    Code = table.Column<string>(maxLength: 50, nullable: false),
+                    RelationShip = table.Column<string>(maxLength: 50, nullable: true),
+                    Note = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,11 +27,11 @@ namespace Infrastructure.Migrations
                 name: "MemberDetails",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    NickName = table.Column<string>(nullable: false),
-                    Phone = table.Column<string>(nullable: true),
-                    Image = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(maxLength: 66, nullable: false),
+                    NickName = table.Column<string>(maxLength: 50, nullable: false),
+                    Phone = table.Column<string>(maxLength: 50, nullable: true),
+                    Image = table.Column<string>(maxLength: 200, nullable: true),
+                    Address = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,11 +48,11 @@ namespace Infrastructure.Migrations
                 name: "MemberHistories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    MemberId = table.Column<string>(nullable: false),
-                    Title = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 66, nullable: false),
+                    MemberId = table.Column<string>(maxLength: 66, nullable: false),
+                    Title = table.Column<string>(maxLength: 100, nullable: false),
                     Date = table.Column<long>(nullable: false),
-                    Detail = table.Column<string>(nullable: true)
+                    Detail = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,17 +69,18 @@ namespace Infrastructure.Migrations
                 name: "MemberPayments",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    MemberId = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 66, nullable: false),
+                    MemberId = table.Column<string>(maxLength: 66, nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     IsScheduled = table.Column<bool>(nullable: false),
                     PaymentType = table.Column<int>(nullable: false),
+                    PaymentMethod = table.Column<int>(nullable: true),
                     PaymentAmount = table.Column<double>(nullable: false),
                     PaymentTotal = table.Column<double>(nullable: false),
                     TaxPercentage = table.Column<double>(nullable: false),
                     DiscountPercentage = table.Column<double>(nullable: false),
                     Date = table.Column<long>(nullable: false),
-                    Note = table.Column<string>(nullable: true)
+                    Note = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,13 +97,13 @@ namespace Infrastructure.Migrations
                 name: "MemberVisitors",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    MemberId = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 66, nullable: false),
+                    MemberId = table.Column<string>(maxLength: 66, nullable: false),
                     VisitorType = table.Column<int>(nullable: false),
                     AccessesDate = table.Column<long>(nullable: true),
                     VisitorStatus = table.Column<int>(nullable: false),
                     Gate = table.Column<int>(nullable: true),
-                    Note = table.Column<string>(nullable: true)
+                    Note = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,14 +120,14 @@ namespace Infrastructure.Migrations
                 name: "ScheduledPayments",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    MemberPaymentId = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 66, nullable: false),
+                    MemberPaymentId = table.Column<string>(maxLength: 66, nullable: false),
                     PaymentAmount = table.Column<double>(nullable: false),
                     PaymentDueDate = table.Column<long>(nullable: false),
                     FulfiledDate = table.Column<long>(nullable: true),
                     Fulfiled = table.Column<bool>(nullable: false),
                     PaymentMethod = table.Column<int>(nullable: false),
-                    Note = table.Column<string>(nullable: true)
+                    Note = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {

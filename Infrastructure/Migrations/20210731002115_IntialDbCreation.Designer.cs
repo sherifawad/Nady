@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(NadyDataContext))]
-    [Migration("20210730153625_Initial")]
-    partial class Initial
+    [Migration("20210731002115_IntialDbCreation")]
+    partial class IntialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,11 +21,13 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("IsOwner")
                         .HasColumnType("INTEGER");
@@ -35,13 +37,16 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Note")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<string>("RelationShip")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -51,20 +56,25 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Models.MemberDetails", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<string>("Address")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Image")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<string>("NickName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Phone")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -75,21 +85,25 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<long>("Date")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Detail")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<string>("MemberId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -102,7 +116,8 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<long>("Date")
                         .HasColumnType("INTEGER");
@@ -115,17 +130,23 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("MemberId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Note")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<double>("PaymentAmount")
                         .HasColumnType("REAL");
+
+                    b.Property<int?>("PaymentMethod")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("PaymentTotal")
                         .HasColumnType("REAL");
@@ -147,7 +168,8 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<long?>("AccessesDate")
                         .HasColumnType("INTEGER");
@@ -157,10 +179,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("MemberId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<string>("Note")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<int>("VisitorStatus")
                         .HasColumnType("INTEGER");
@@ -179,7 +203,8 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<bool>("Fulfiled")
                         .HasColumnType("INTEGER");
@@ -189,10 +214,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("MemberPaymentId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(66);
 
                     b.Property<string>("Note")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
 
                     b.Property<double>("PaymentAmount")
                         .HasColumnType("REAL");

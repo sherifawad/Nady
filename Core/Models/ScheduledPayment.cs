@@ -10,6 +10,7 @@ namespace Core.Models
     public class ScheduledPayment : BaseModel
     {
         [Required]
+        [MaxLength(66)]
         public string MemberPaymentId { get; set; }
         [Required]
         public decimal PaymentAmount { get; set; }
@@ -18,6 +19,7 @@ namespace Core.Models
         public DateTimeOffset? FulfiledDate { get; set; }
         public bool Fulfiled { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        [MaxLength(200)]
         public string Note { get; set; }
 
         public virtual MemberPayment MemberPayment { get; set; }

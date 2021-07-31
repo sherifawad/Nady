@@ -9,14 +9,18 @@ namespace Core.Models
     public class Member : BaseModel
     {
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
         public MemberDetails MemberDetails { get; set; }
         public MemberStatus MemberStatus { get; set; }
         public virtual List<MemberHistory> MemberHistoriesList { get; set; } = new List<MemberHistory>();
         public bool IsOwner { get; set; }
         [Required]
+        [MaxLength(50)]
         public string Code { get; set; }
+        [MaxLength(50)]
         public string RelationShip { get; set; }
+        [MaxLength(200)]
         public string Note { get; set; }
         public virtual List<MemberPayment> MemberPayments { get; set; } = new List<MemberPayment>();
     }

@@ -48,8 +48,10 @@ namespace Infrastructure.Services
         public async Task<IReadOnlyList<MemberPayment>> GetPaymentsAsync(
             string memberId = null,
             string name = null,
+            string note = null,
             bool? isScheduled = null,
             int? paymentType = null,
+            int? paymentMethod = null,
             decimal? paymentAmount = null,
             decimal? paymentTotal = null,
             double? taxPercentage = null,
@@ -60,8 +62,10 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<MemberPayment>().Get(x =>
                 (!string.IsNullOrWhiteSpace(memberId) ? x.MemberId == memberId : true) &&
                 (!string.IsNullOrWhiteSpace(name) ? x.Name.ToLower().Contains(name.ToLower()) : true) &&
+                (!string.IsNullOrWhiteSpace(note) ? x.Note.ToLower().Contains(note.ToLower()) : true) &&
                 (isScheduled != null ? x.IsScheduled == isScheduled : true) &&
                 (paymentType != null ? x.PaymentType == (PaymentType)paymentType : true) &&
+                (paymentMethod != null ? x.PaymentMethod == (PaymentMethod)paymentMethod : true) &&
                 (paymentAmount != null ? x.PaymentAmount == paymentAmount : true) &&
                 (paymentTotal != null ? x.PaymentTotal == paymentTotal : true) &&
                 (taxPercentage != null ? x.TaxPercentage == taxPercentage : true) &&

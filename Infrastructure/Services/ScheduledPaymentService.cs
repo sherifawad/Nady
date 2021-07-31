@@ -26,11 +26,11 @@ namespace Infrastructure.Services
             return null;
         }
 
-        public async Task<bool> DeletePaymentAsync(string scheduledPaymentId)
+        public async Task<bool> DeleteScheduledPaymentAsync(string scheduledPaymentId)
         {
-            var payment = await _unitOfWork.Repository<ScheduledPayment>().GetFirstOrDefault(x => x.Id == scheduledPaymentId);
-            if (payment == null) return false;
-            await _unitOfWork.Repository<ScheduledPayment>().DeleteItemAsync(payment);
+            var scheduledPayment = await _unitOfWork.Repository<ScheduledPayment>().GetFirstOrDefault(x => x.Id == scheduledPaymentId);
+            if (scheduledPayment == null) return false;
+            await _unitOfWork.Repository<ScheduledPayment>().DeleteItemAsync(scheduledPayment);
             if (await _unitOfWork.Complete()) return true;
 
             return false;
@@ -38,28 +38,39 @@ namespace Infrastructure.Services
 
         public async Task<ScheduledPayment> GetScheduledPaymentAsync(string scheduledPaymentId)
         {
-            var paymen = await _unitOfWork.Repository<ScheduledPayment>().GetFirstOrDefault(x => x.Id == scheduledPaymentId);
+            var paymen = await _unitOfWork.Repository<ScheduledPayment>().GetFirstOrDefault(x => x.Id == scheduledPaymentId, track:false);
 
             if (paymen == null) return null;
 
             return paymen;
         }
 
-        public async Task<IReadOnlyList<ScheduledPayment>> GetScheduledPaymentsAsync()
+        public async Task<IReadOnlyList<ScheduledPayment>> GetScheduledPaymentsAsync(
+            string memberPaymentId = null,
+            decimal? paymentAmount = null,
+            bool? fulfiled = null,
+            int? paymentMethod = null,
+            string note = null,
+            DateTimeOffset? paymentDueStartDate = null,
+            DateTimeOffset? paymentDueEndtDate = null,
+            DateTimeOffset? fulfiledStartDate = null,
+            DateTimeOffset? fulfiledEndtDate = null
+            )
         {
-            return await _unitOfWork.Repository<ScheduledPayment>().GetAllAsync();
+            return await _unitOfWork.Repository<ScheduledPayment>().Get(x =>
+                (!string.IsNullOrWhiteSpace(memberPaymentId) ? x.MemberPaymentId == memberPaymentId : true) &&
+                (!string.IsNullOrWhiteSpace(note) ? x.Note.ToLower().Contains(note.ToLower()) : true) &&
+                (fulfiled != null ? x.Fulfiled == fulfiled : true) &&
+                (paymentMethod != null ? x.PaymentMethod == (PaymentMethod)paymentMethod : true) &&
+                (paymentAmount != null ? x.PaymentAmount == paymentAmount : true) &&
+                (paymentDueStartDate != null ? x.PaymentDueDate >= paymentDueStartDate : true) &&
+                (paymentDueEndtDate != null ? x.PaymentDueDate <= paymentDueEndtDate : true)&&
+                (fulfiledStartDate != null ? x.FulfiledDate >= fulfiledStartDate : true) &&
+                (fulfiledEndtDate != null ? x.FulfiledDate <= fulfiledEndtDate : true),
+                orderBy: x => x.OrderBy(y => y.PaymentDueDate).ThenBy(y => y.FulfiledDate), track: false);
         }
 
-        public async Task<IReadOnlyList<ScheduledPayment>> GetScheduledPaymentsAsync(string paymentId)
-        {
-            var payments = await _unitOfWork.Repository<ScheduledPayment>().Get(x => x.MemberPaymentId == paymentId, orderBy: x => x.OrderBy(y => y.PaymentDueDate).ThenBy(y => y.FulfiledDate));
-
-            if (payments == null) return null;
-
-            return payments;
-        }
-
-        public async Task<ScheduledPayment> UpdatePaymentAsync(ScheduledPayment scheduledPayment)
+        public async Task<ScheduledPayment> UpdateScheduledPaymentAsync(ScheduledPayment scheduledPayment)
         {
             await _unitOfWork.Repository<ScheduledPayment>().UpdateItemAsync(scheduledPayment);
             // save to db

@@ -7,7 +7,6 @@ namespace Core.Models.Enum
     public enum PaymentType
     {
 
-        Null,
         One,
         Scheduled
     }

@@ -23,6 +23,7 @@ namespace Infrastructure.Extensions
                 PaymentAmount = payment.PaymentAmount,
                 PaymentTotal = payment.PaymentTotal,
                 PaymentType = ((int)payment.PaymentType),
+                PaymentMethod = ((int)payment.PaymentMethod),
                 TaxPercentage = payment.TaxPercentage
             };
         }
@@ -40,6 +41,7 @@ namespace Infrastructure.Extensions
                 PaymentAmount = payment.PaymentAmount,
                 PaymentTotal = payment.PaymentTotal,
                 PaymentType = (PaymentType)payment.PaymentType,
+                PaymentMethod = ((PaymentMethod)payment.PaymentMethod),
                 TaxPercentage = payment.TaxPercentage
             };
         }

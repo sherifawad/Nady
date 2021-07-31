@@ -8,8 +8,10 @@ namespace Infrastructure.Dtos
     public class ScheduledPaymentDto
     {
         [Required]
+        [MaxLength(66)]
         public string Id { get; set; }
         [Required]
+        [MaxLength(66)]
         public string MemberPaymentId { get; set; }
         [Required]
         public decimal PaymentAmount { get; set; }
@@ -18,6 +20,7 @@ namespace Infrastructure.Dtos
         public DateTimeOffset? FulfiledDate { get; set; }
         public bool Fulfiled { get; set; }
         public int PaymentMethod { get; set; }
+        [MaxLength(200)]
         public string Note { get; set; }
     }
 }

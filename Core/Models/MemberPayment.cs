@@ -8,11 +8,15 @@ namespace Core.Models
     public class MemberPayment : BaseModel
     {
         [Required]
+        [MaxLength(66)]
         public string MemberId { get; set; }
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
         public bool IsScheduled { get; set; }
+        [Required]
         public PaymentType PaymentType { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
         public decimal PaymentAmount { get; set; }
         [Required]
         public decimal PaymentTotal { get; set; }
@@ -20,6 +24,7 @@ namespace Core.Models
         public double DiscountPercentage { get; set; }
         [Required]
         public DateTimeOffset Date { get; set; }
+        [MaxLength(200)]
         public string Note { get; set; }
         public virtual IEnumerable<ScheduledPayment> ScheduledPayments { get; set; } = new List<ScheduledPayment>();
 
