@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(NadyDataContext))]
-    [Migration("20210731174829_InitialCreation")]
+    [Migration("20210731223123_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200);
 
                     b.Property<string>("RelationShip")
+                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
@@ -125,9 +126,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<double?>("DiscountPercentage")
                         .HasColumnType("REAL");
-
-                    b.Property<bool>("IsScheduled")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MemberId")
                         .IsRequired()

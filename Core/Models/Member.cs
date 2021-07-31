@@ -14,10 +14,12 @@ namespace Core.Models
         public MemberDetails MemberDetails { get; set; }
         public MemberStatus MemberStatus { get; set; }
         public virtual List<MemberHistory> MemberHistoriesList { get; set; } = new List<MemberHistory>();
+        [Required]
         public bool IsOwner { get; set; }
         [Required]
         [MaxLength(50)]
         public string Code { get; set; }
+        [Required]
         [MaxLength(50)]
         public string RelationShip { get; set; }
         [MaxLength(200)]

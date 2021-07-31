@@ -16,7 +16,6 @@ namespace Core.Interfaces
             bool? isScheduled = null,
             int? paymentType = null,
             int? paymentMethod = null,
-            decimal? paymentAmount = null,
             decimal? paymentTotal = null,
             double? taxPercentage = null,
             double? discountPercentage = null,

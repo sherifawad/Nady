@@ -52,7 +52,6 @@ namespace Infrastructure.Services
             bool? isScheduled = null,
             int? paymentType = null,
             int? paymentMethod = null,
-            decimal? paymentAmount = null,
             decimal? paymentTotal = null,
             double? taxPercentage = null,
             double? discountPercentage = null,
@@ -63,7 +62,6 @@ namespace Infrastructure.Services
                 (!string.IsNullOrWhiteSpace(memberId) ? x.MemberId == memberId : true) &&
                 (!string.IsNullOrWhiteSpace(name) ? x.Name.ToLower().Contains(name.ToLower()) : true) &&
                 (!string.IsNullOrWhiteSpace(note) ? x.Note.ToLower().Contains(note.ToLower()) : true) &&
-                (isScheduled != null ? x.IsScheduled == isScheduled : true) &&
                 (paymentType != null ? x.PaymentType == (PaymentType)paymentType : true) &&
                 (paymentMethod != null ? x.PaymentMethod == (PaymentMethod)paymentMethod : true) &&
                 (paymentTotal != null ? x.PaymentTotal == paymentTotal : true) &&

@@ -78,16 +78,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.MembersController.CreateMember(Infrastructure.Dtos.MemberDto,System.Boolean,System.Int32,System.Nullable{System.Int32},System.Decimal,System.Decimal,System.Double,System.Double,System.DateTimeOffset,System.String,System.Decimal,System.Int32)">
+        <member name="M:Nady.Controllers.MembersController.CreateMember(Infrastructure.Dtos.MemberDto,System.Int32,System.Nullable{System.Int32},System.Decimal,System.Double,System.Double,System.DateTimeOffset,System.String,System.Decimal,System.Int32)">
             <summary>
             Create A member
             </summary>
             <param name="memberDto"></param>
-            <param name="price"></param>
-            <param name="isScheduled"></param>
             <param name="type"></param>
             <param name="method"></param>
-            <param name="amount"></param>
             <param name="total"></param>
             <param name="tax"></param>
             <param name="discount"></param>
@@ -123,16 +120,16 @@
             </summary>
             <param name="paymentService"></param>
         </member>
-        <member name="M:Nady.Controllers.PaymentsController.GetPaymentsAsync(System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Double},System.Nullable{System.Double},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
+        <member name="M:Nady.Controllers.PaymentsController.GetPaymentsAsync(System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Double},System.Nullable{System.Double},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
             <summary>
             Get all Payments
             </summary>
             <param name="memberId"></param>
             <param name="name"></param>
+            <param name="note"></param>
             <param name="isScheduled"></param>
             <param name="paymentType"></param>
             <param name="paymentMethod"></param>
-            <param name="paymentAmount"></param>
             <param name="paymentTotal"></param>
             <param name="taxPercentage"></param>
             <param name="discountPercentage"></param>

@@ -16,7 +16,6 @@ namespace Infrastructure.Dtos
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
-        public bool IsScheduled { get; set; }
         [Required]
         public int PaymentType { get; set; }
         public int? PaymentMethod { get; set; }

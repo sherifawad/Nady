@@ -38,10 +38,10 @@ namespace Nady.Controllers
         /// </summary>
         /// <param name="memberId"></param>
         /// <param name="name"></param>
+        /// <param name="note"></param>
         /// <param name="isScheduled"></param>
         /// <param name="paymentType"></param>
         /// <param name="paymentMethod"></param>
-        /// <param name="paymentAmount"></param>
         /// <param name="paymentTotal"></param>
         /// <param name="taxPercentage"></param>
         /// <param name="discountPercentage"></param>
@@ -57,7 +57,6 @@ namespace Nady.Controllers
             [FromQuery] bool? isScheduled = null,
             [FromQuery] int? paymentType = null,
             [FromQuery] int? paymentMethod = null,
-            [FromQuery] decimal? paymentAmount = null,
             [FromQuery] decimal? paymentTotal = null,
             [FromQuery] double? taxPercentage = null,
             [FromQuery] double? discountPercentage = null,
@@ -65,7 +64,7 @@ namespace Nady.Controllers
             [FromQuery] DateTimeOffset? endDate = null)
         {
 
-            return(await _paymentService.GetPaymentsAsync(memberId, name, note, isScheduled, paymentType, paymentMethod, paymentAmount, paymentTotal, taxPercentage, discountPercentage, startDate, endDate))
+            return(await _paymentService.GetPaymentsAsync(memberId, name, note, isScheduled, paymentType, paymentMethod, paymentTotal, taxPercentage, discountPercentage, startDate, endDate))
                 .Select( x => x.AsDto());
 
             //Logger.LogInfromation($"{DateTime.UtcNow.ToString("hh:mm:ss")}: Retrived {members}");

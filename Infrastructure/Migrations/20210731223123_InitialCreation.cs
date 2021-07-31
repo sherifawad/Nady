@@ -15,7 +15,7 @@ namespace Infrastructure.Migrations
                     MemberStatus = table.Column<int>(nullable: false),
                     IsOwner = table.Column<bool>(nullable: false),
                     Code = table.Column<string>(maxLength: 50, nullable: false),
-                    RelationShip = table.Column<string>(maxLength: 50, nullable: true),
+                    RelationShip = table.Column<string>(maxLength: 50, nullable: false),
                     Note = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
@@ -72,7 +72,6 @@ namespace Infrastructure.Migrations
                     Id = table.Column<string>(maxLength: 66, nullable: false),
                     MemberId = table.Column<string>(maxLength: 66, nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
-                    IsScheduled = table.Column<bool>(nullable: false),
                     PaymentType = table.Column<int>(nullable: false),
                     PaymentMethod = table.Column<int>(nullable: true),
                     PaymentTotal = table.Column<double>(nullable: false),

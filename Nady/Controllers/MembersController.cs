@@ -73,11 +73,8 @@ namespace Nady.Controllers
         /// Create A member
         /// </summary>
         /// <param name="memberDto"></param>
-        /// <param name="price"></param>
-        /// <param name="isScheduled"></param>
         /// <param name="type"></param>
         /// <param name="method"></param>
-        /// <param name="amount"></param>
         /// <param name="total"></param>
         /// <param name="tax"></param>
         /// <param name="discount"></param>
@@ -90,10 +87,8 @@ namespace Nady.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<MemberDto>> CreateMember([FromBody] MemberDto memberDto, 
-            [FromQuery]bool isScheduled,
             [FromQuery] int type,
             [FromQuery] int? method,
-            [FromQuery] decimal amount,
             [FromQuery] decimal total,
             [FromQuery] double tax,
             [FromQuery] double discount,
@@ -105,7 +100,7 @@ namespace Nady.Controllers
         {
 
             var memberToCreate = memberDto.FromDto();
-            var createdMember = await _memberService.CreateMemberAsync(memberToCreate, isScheduled, type, method, amount, total, tax, discount, date, note, scheduledpaymenamount, scheduledevery);
+            var createdMember = await _memberService.CreateMemberAsync(memberToCreate, type, method, total, tax, discount, date, note, scheduledpaymenamount, scheduledevery);
             if (createdMember == null)
                 return BadRequest("Failed to Add Member");
 

@@ -13,7 +13,6 @@ namespace Core.Models
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
-        public bool IsScheduled { get; set; }
         [Required]
         public PaymentType PaymentType { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }

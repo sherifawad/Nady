@@ -24,7 +24,7 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Member> CreateMemberAsync(Member memberToCreate, bool isScheduled, int type, int? method, decimal amount, decimal total, double tax, double discount, DateTimeOffset date, string note, decimal scheduledpaymenamount, int scheduledevery)
+        public async Task<Member> CreateMemberAsync(Member memberToCreate, int type, int? method, decimal total, double tax, double discount, DateTimeOffset date, string note, decimal scheduledpaymenamount, int scheduledevery)
         {
             var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower().Replace(" ", "") == memberToCreate.Name.ToLower().Replace(" ", ""), track: false);
             if (DublicateName != null) return null;
@@ -39,19 +39,18 @@ namespace Infrastructure.Services
             {
                 Date = DateTimeOffset.Now,
                 DiscountPercentage = discount,
-                IsScheduled = isScheduled,
                 Name = "Addition",
                 Note = note,
                 PaymentTotal = total,
                 PaymentType = (PaymentType)type,
                 TaxPercentage = tax,
-                PaymentMethod = isScheduled? null : (PaymentMethod)method,
+                PaymentMethod = type == ((int)PaymentType.Scheduled) ? null : (PaymentMethod)method,
                 MemberId = memberToCreate.Id
 
             };
             await _unitOfWork.Repository<MemberPayment>().AddItemAsync(memberPayment);
 
-            if (isScheduled)
+            if (type == ((int)PaymentType.Scheduled))
             {
                 var scheduledPayments = new List<ScheduledPayment>();
 

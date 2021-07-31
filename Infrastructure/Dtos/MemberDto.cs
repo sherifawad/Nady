@@ -22,10 +22,12 @@ namespace Infrastructure.Dtos
         [MaxLength(200)]
         public string Address { get; set; }
         public MemberStatus MemberStatus { get; set; }
+        [Required]
         public bool IsOwner { get; set; }
         [Required]
         [MaxLength(50)]
         public string Code { get; set; }
+        [Required]
         [MaxLength(50)]
         public string RelationShip { get; set; }
         [MaxLength(200)]

@@ -72,7 +72,7 @@ namespace DataBase.Repository
         }
 
 
-        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = "", bool track = true)
+        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = "", bool track = false)
         {
             IQueryable<T> query = null;
             if (track)
@@ -94,7 +94,7 @@ namespace DataBase.Repository
         }
 
         public async Task<List<T>> Get(Expression<Func<T, bool>> filter = null, string includeProperties = "",
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool track = true) 
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool track = false) 
         {
             IQueryable<T> query = null;
             if (track)

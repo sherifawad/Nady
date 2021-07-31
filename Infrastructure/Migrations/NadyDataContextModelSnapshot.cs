@@ -44,6 +44,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200);
 
                     b.Property<string>("RelationShip")
+                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
@@ -123,9 +124,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<double?>("DiscountPercentage")
                         .HasColumnType("REAL");
-
-                    b.Property<bool>("IsScheduled")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MemberId")
                         .IsRequired()
