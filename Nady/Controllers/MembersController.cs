@@ -41,10 +41,16 @@ namespace Nady.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<MemberDto>> GetMembers([FromQuery] string name = null, [FromQuery] string code = null)
+        public async Task<IEnumerable<MemberDto>> GetMembers(
+            [FromQuery]string memberName = null,
+            [FromQuery]string code = null,
+            [FromQuery]bool? isowner = null,
+            [FromQuery]int? status = null,
+            [FromQuery]string relationshop = null,
+            [FromQuery] string note = null)
         {
 
-            var members = (await _memberService.GetMembersAsync(name, code))
+            var members = (await _memberService.GetMembersAsync(memberName, code, isowner, status, relationshop, note))
                 .Select( x => x.AsDto());
 
             return members;
@@ -78,7 +84,6 @@ namespace Nady.Controllers
         /// <param name="total"></param>
         /// <param name="tax"></param>
         /// <param name="discount"></param>
-        /// <param name="date"></param>
         /// <param name="note"></param>
         /// <param name="scheduledpaymenamount"></param>
         /// <param name="scheduledevery"></param>
@@ -87,12 +92,11 @@ namespace Nady.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<MemberDto>> CreateMember([FromBody] MemberDto memberDto, 
-            [FromQuery] int type,
+            [FromQuery] int? type,
             [FromQuery] int? method,
             [FromQuery] decimal total,
-            [FromQuery] double tax,
-            [FromQuery] double discount,
-            [FromQuery] DateTimeOffset date,
+            [FromQuery] double? tax,
+            [FromQuery] double? discount,
             [FromQuery] string note,
             [FromQuery] decimal scheduledpaymenamount,
             [FromQuery] int scheduledevery
@@ -100,7 +104,16 @@ namespace Nady.Controllers
         {
 
             var memberToCreate = memberDto.FromDto();
-            var createdMember = await _memberService.CreateMemberAsync(memberToCreate, type, method, total, tax, discount, date, note, scheduledpaymenamount, scheduledevery);
+            var createdMember = await _memberService.CreateMemberAsync(
+                memberToCreate,
+                type,
+                method,
+                total,
+                tax,
+                discount,
+                note,
+                scheduledpaymenamount,
+                scheduledevery);
             if (createdMember == null)
                 return BadRequest("Failed to Add Member");
 

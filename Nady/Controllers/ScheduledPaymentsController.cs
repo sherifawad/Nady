@@ -111,7 +111,7 @@ namespace Nady.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpadateHistory(string id, [FromBody] ScheduledPaymentDto scheduledPaymentDto)
+        public async Task<IActionResult> UpadateScheduledPayment(string id, [FromBody] ScheduledPaymentDto scheduledPaymentDto)
         {
             if (scheduledPaymentDto.Id != id) return BadRequest("Failed to update");
             var scheduledPaymentToUpdate = await _scheduledPaymentService.GetScheduledPaymentAsync(id);
@@ -130,7 +130,7 @@ namespace Nady.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeletePayment(string id)
+        public async Task<IActionResult> DeleteScheduledPayment(string id)
         {
             var result = await _scheduledPaymentService.DeleteScheduledPaymentAsync(id);
             if (result) return NoContent();

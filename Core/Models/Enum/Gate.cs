@@ -6,7 +6,6 @@ namespace Core.Models.Enum
 {
     public enum Gate
     {
-        Null,
         Moalmeen,
         Taha,
         Moderia,

@@ -39,7 +39,6 @@ namespace Nady.Controllers
         /// <param name="memberId"></param>
         /// <param name="name"></param>
         /// <param name="note"></param>
-        /// <param name="isScheduled"></param>
         /// <param name="paymentType"></param>
         /// <param name="paymentMethod"></param>
         /// <param name="paymentTotal"></param>
@@ -114,7 +113,7 @@ namespace Nady.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpadateHistory(string id, [FromBody] MemberPaymentDto paymentDto)
+        public async Task<IActionResult> UpadatePayment(string id, [FromBody] MemberPaymentDto paymentDto)
         {
             if (paymentDto.Id != id) return BadRequest("Failed to update");
             var paymentToUpdate = await _paymentService.GetPaymentAsync(id);

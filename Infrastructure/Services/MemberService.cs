@@ -24,21 +24,34 @@ namespace Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Member> CreateMemberAsync(Member memberToCreate, int type, int? method, decimal total, double tax, double discount, DateTimeOffset date, string note, decimal scheduledpaymenamount, int scheduledevery)
+        public async Task<Member> CreateMemberAsync(
+            Member memberToCreate,
+            int? type,
+            int? method,
+            decimal total,
+            double? tax,
+            double? discount,
+            string note,
+            decimal scheduledpaymenamount,
+            int scheduledevery)
         {
+            if (total == 0 || type == null || !Enum.IsDefined(typeof(PaymentType), type) || ((type == ((int)PaymentType.Scheduled)) && (scheduledpaymenamount == default || scheduledevery == 0)))
+                return null;
+
             //Replace multiple White spaces between words to one space
             memberToCreate.Name = regex.Replace(memberToCreate.Name, " ").Trim();
             //Remove WhiteSpaces
             memberToCreate.Code = regex.Replace(memberToCreate.Code, " ").Replace(" ","").Trim();
+            memberToCreate.RelationShip = regex.Replace(memberToCreate.RelationShip, " ").Replace(" ","").Trim();
             //Check for exact name dublicate
             var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower() == memberToCreate.Name.ToLower(), track: false);
             if (DublicateName != null) return null;
             // ensure every code group has one owner
-            if (memberToCreate.IsOwner)
-            {
-                var DublicateOwner = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Code == memberToCreate.Code && x.IsOwner == true, track: false);
-                if (DublicateOwner != null) return null;
-            }
+            var DublicateOwner = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Code == memberToCreate.Code && x.IsOwner == true, track: false);
+            //if the created member is owner and the code group already has owner return null
+            if (memberToCreate.IsOwner && DublicateOwner is not null ) return null;
+            //if the created member is not owner and the code group has no owner return null
+            if (!memberToCreate.IsOwner && DublicateOwner is null) return null;
             await _unitOfWork.Repository<Member>().AddItemAsync(memberToCreate);
             var memberHistory = new MemberHistory {MemberId = memberToCreate.Id, Date = DateTimeOffset.Now, Title = "Added" };
             await _unitOfWork.Repository<MemberHistory>().AddItemAsync(memberHistory);
@@ -118,7 +131,13 @@ namespace Infrastructure.Services
             return member;
         }
 
-        public async Task<IReadOnlyList<Member>> GetMembersAsync(string memberName = null, string code = null)
+        public async Task<IReadOnlyList<Member>> GetMembersAsync(
+            string memberName = null,
+            string code = null,
+            bool? isowner = null,
+            int? status = null,
+            string relationshop = null,
+            string note = null)
         {
             Expression<Func<Member, bool>> predicateExpression = null;
 
@@ -130,7 +149,13 @@ namespace Infrastructure.Services
 
             // Build the individual conditions to check against.
             var orConditions = keywords?
-                .Select(keyword => (Expression<Func<Member, bool>>)(i => i.Name.ToLower().Contains(keyword)))
+                .Select(keyword => (Expression<Func<Member, bool>>)(i => (i.Name.ToLower().Contains(keyword)) &&
+                (!string.IsNullOrWhiteSpace(relationshop) ? i.RelationShip.ToLower().Contains(relationshop.ToLower()) : true) &&
+                (!string.IsNullOrWhiteSpace(note) ? i.Note.ToLower().Contains(note.ToLower()) : true) &&
+                (!string.IsNullOrWhiteSpace(code) ? i.Code.ToLower().Contains(code.ToLower()) : true) &&
+                (isowner != null ? i.IsOwner == isowner : true) &&
+                ((status != null && Enum.IsDefined(typeof(MemberStatus), status)) ? i.MemberStatus == (MemberStatus)status : true)
+                ))
                 .Select(lambda => (Expression)Expression.Invoke(lambda, memberParameter));
 
             // Combine the individual conditions to an expression tree of nested ORs.
@@ -146,19 +171,29 @@ namespace Infrastructure.Services
                 predicateExpression = (Expression<Func<Member, bool>>)Expression.Lambda(
                     orExpressionTree,
                     memberParameter);
+
+                return await _unitOfWork.Repository<Member>().Get(predicateExpression, orderBy: x => x.OrderBy(y => y.Name), track: false);
             }
 
+            return await _unitOfWork.Repository<Member>().Get(x =>
+                (!string.IsNullOrWhiteSpace(relationshop) ? x.RelationShip.ToLower().Contains(relationshop.ToLower()) : true) &&
+                (!string.IsNullOrWhiteSpace(code) ? x.Code.ToLower().Contains(code.ToLower()) : true) &&
+                (!string.IsNullOrWhiteSpace(note) ? x.Note.ToLower().Contains(note.ToLower()) : true) &&
+                (isowner != null ? x.IsOwner == isowner : true) &&
+                ((status != null && Enum.IsDefined(typeof(MemberStatus), status)) ? x.MemberStatus == (MemberStatus)status : true),
+                orderBy: x => x.OrderBy(y => y.Name), track: false);
 
-            if (string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
-                return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()));
-            else if(!string.IsNullOrWhiteSpace(memberName) && string.IsNullOrWhiteSpace(code))
-                return await _unitOfWork.Repository<Member>().Get(predicateExpression);
-                //return await _unitOfWork.Repository<Member>().Get(x => keywords.Any(val => x.Name.Contains(val)));
-            //return await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(memberName.ToLower()));
-            else if(!string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
-                return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()) && x.Name.ToLower().Contains(memberName.ToLower()));
 
-            return await _unitOfWork.Repository<Member>().GetAllAsync();
+            //if (string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
+            //    return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()));
+            //else if(!string.IsNullOrWhiteSpace(memberName) && string.IsNullOrWhiteSpace(code))
+
+            //    //return await _unitOfWork.Repository<Member>().Get(x => keywords.Any(val => x.Name.Contains(val)));
+            ////return await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(memberName.ToLower()));
+            //else if(!string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
+            //    return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()) && x.Name.ToLower().Contains(memberName.ToLower()));
+
+            //return await _unitOfWork.Repository<Member>().GetAllAsync();
 
         }
 

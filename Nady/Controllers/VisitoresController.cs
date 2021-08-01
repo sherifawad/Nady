@@ -58,8 +58,7 @@ namespace Nady.Controllers
             [FromQuery] int? gate = null
             )
         {
-            return (await _visitorService.GetVisitorsAsync(note, memberId, type, status, addedStart, addedEnd, accessedStart, accessedEnd, gate)).Select(x => x.AsDto());
-                
+            return (await _visitorService.GetVisitorsAsync(note, memberId, type, status, addedStart, addedEnd, accessedStart, accessedEnd, gate)).Select(x => x.AsDto());                
         }
 
         /// <summary>

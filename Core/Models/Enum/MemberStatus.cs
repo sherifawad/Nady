@@ -6,7 +6,6 @@ namespace Core.Models.Enum
 {
     public enum MemberStatus
     {
-        Null,
         Active,
         OnHold,
         Suspended,

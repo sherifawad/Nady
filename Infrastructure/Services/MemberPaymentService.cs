@@ -57,12 +57,14 @@ namespace Infrastructure.Services
             DateTimeOffset? startDate = null,
             DateTimeOffset? endDate = null)
         {
+            if (!Enum.IsDefined(typeof(PaymentType), paymentType))
+                return null;
             return await _unitOfWork.Repository<MemberPayment>().Get(x =>
                 (!string.IsNullOrWhiteSpace(memberId) ? x.MemberId == memberId : true) &&
                 (!string.IsNullOrWhiteSpace(name) ? x.Name.ToLower().Contains(name.ToLower()) : true) &&
                 (!string.IsNullOrWhiteSpace(note) ? x.Note.ToLower().Contains(note.ToLower()) : true) &&
-                (paymentType != null ? x.PaymentType == (PaymentType)paymentType : true) &&
-                (paymentMethod != null ? x.PaymentMethod == (PaymentMethod)paymentMethod : true) &&
+                ((paymentType != null && Enum.IsDefined(typeof(PaymentType), paymentType)) ? x.PaymentType == (PaymentType)paymentType : true) &&
+                ((paymentMethod != null && Enum.IsDefined(typeof(PaymentMethod), paymentMethod)) ? x.PaymentMethod == (PaymentMethod)paymentMethod : true) &&
                 (paymentTotal != null ? x.PaymentTotal == paymentTotal : true) &&
                 (taxPercentage != null ? x.TaxPercentage == taxPercentage : true) &&
                 (discountPercentage != null ? x.DiscountPercentage == discountPercentage : true) &&

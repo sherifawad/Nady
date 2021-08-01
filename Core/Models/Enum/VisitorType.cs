@@ -7,7 +7,6 @@ namespace Core.Models.Enum
     public enum VisitorType
     {
 
-        Null,
         Free,
         Paid
     }
