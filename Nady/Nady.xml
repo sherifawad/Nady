@@ -99,7 +99,7 @@
             Update a member
             </summary>
             <param name="id"></param>
-            <param name="member"></param>
+            <param name="memberDto"></param>
             <returns></returns>
         </member>
         <member name="M:Nady.Controllers.MembersController.DeleteMember(System.String)">
@@ -120,7 +120,7 @@
             </summary>
             <param name="paymentService"></param>
         </member>
-        <member name="M:Nady.Controllers.PaymentsController.GetPaymentsAsync(System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Double},System.Nullable{System.Double},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
+        <member name="M:Nady.Controllers.PaymentsController.GetPaymentsAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Double},System.Nullable{System.Double},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
             <summary>
             Get all Payments
             </summary>
@@ -232,13 +232,19 @@
             </summary>
             <param name="visitorService"></param>
         </member>
-        <member name="M:Nady.Controllers.VisitoresController.GetVisitoresAsync(System.String,System.Int32,System.Int32)">
+        <member name="M:Nady.Controllers.VisitoresController.GetVisitoresAsync(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int32})">
             <summary>
             Get visitors 
             </summary>
-            <param name="memberId">Member Id</param>
-            <param name="type">0 all, 1 Free, 2 Paid</param>
-            <param name="status">0 all, 1 used, 2 unused 3 suspend</param>
+            <param name="note"></param>
+            <param name="memberId"></param>
+            <param name="type"></param>
+            <param name="status"></param>
+            <param name="addedStart"></param>
+            <param name="addedEnd"></param>
+            <param name="accessedStart"></param>
+            <param name="accessedEnd"></param>
+            <param name="gate"></param>
             <returns></returns>
         </member>
         <member name="M:Nady.Controllers.VisitoresController.GetVisitorByIdAsync(System.String)">
@@ -248,12 +254,17 @@
             <param name="id">visitor id</param>
             <returns></returns>
         </member>
-        <member name="M:Nady.Controllers.VisitoresController.CreateVisitorsAsync(Infrastructure.Dtos.MemberVisitorDto,System.Int32)">
+        <member name="M:Nady.Controllers.VisitoresController.CreateVisitorsAsync(Infrastructure.Dtos.MemberVisitorDto,System.Decimal,System.Nullable{System.Double},System.Nullable{System.Double},System.Nullable{System.Int32},System.String,System.Int32)">
             <summary>
             create Visitors
             </summary>
-            <param name="visitor">visitor to create</param>
-            <param name="count">number of visitors to create</param>
+            <param name="visitor"></param>
+            <param name="singleVisitorPrice"></param>
+            <param name="discount"></param>
+            <param name="tax"></param>
+            <param name="method"></param>
+            <param name="note"></param>
+            <param name="count"></param>
             <returns></returns>
         </member>
         <member name="M:Nady.Controllers.VisitoresController.Upadatevisitor(System.String,Infrastructure.Dtos.MemberVisitorDto)">
@@ -269,15 +280,6 @@
             Delete visitor
             </summary>
             <param name="id">visitor id</param>
-            <returns></returns>
-        </member>
-        <member name="M:Nady.Controllers.VisitoresController.Delete(System.String,System.Int32,System.Int32)">
-            <summary>
-            Delete member visitors
-            </summary>
-            <param name="memberId">member id</param>
-            <param name="type">visitor type => 0 all, 1 Free, 2 Paid</param>
-            <param name="status">0 all, 1 used, 2 unused 3 suspend</param>
             <returns></returns>
         </member>
     </members>

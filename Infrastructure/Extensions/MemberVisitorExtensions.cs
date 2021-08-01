@@ -19,7 +19,8 @@ namespace Infrastructure.Extensions
                 Gate = (int?)visitor.Gate.Value,
                 MemberId = visitor.MemberId,
                 VisitorStatus = (int)visitor.VisitorStatus,
-                VisitorType = (int)visitor.VisitorType
+                VisitorType = (int)visitor.VisitorType,
+                AddedDate = visitor.AddedDate
 
             };
         }
@@ -33,7 +34,8 @@ namespace Infrastructure.Extensions
                 Gate = ((Gate?)visitor.Gate.Value),
                 MemberId = visitor.MemberId,
                 VisitorStatus = (VisitorStatus)visitor.VisitorStatus,
-                VisitorType = (VisitorType)visitor.VisitorType
+                VisitorType = (VisitorType)visitor.VisitorType,
+                AddedDate = visitor.AddedDate
 
             };
         }

@@ -14,6 +14,8 @@ namespace Core.Models
         public string MemberId { get; set; }
         [Required]
         public VisitorType VisitorType { get; set; }
+        [Required]
+        public DateTimeOffset AddedDate { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset? AccessesDate { get; set; }
         [Required]
         public VisitorStatus VisitorStatus { get; set; }

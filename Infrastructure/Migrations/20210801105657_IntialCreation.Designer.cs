@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(NadyDataContext))]
-    [Migration("20210731223123_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20210801105657_IntialCreation")]
+    partial class IntialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -168,6 +168,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(66);
 
                     b.Property<long?>("AccessesDate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("AddedDate")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("Gate")

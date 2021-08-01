@@ -113,7 +113,7 @@ namespace Nady.Controllers
         /// Update a member
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="member"></param>
+        /// <param name="memberDto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

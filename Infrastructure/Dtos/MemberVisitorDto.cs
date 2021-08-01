@@ -15,6 +15,8 @@ namespace Infrastructure.Dtos
         public string MemberId { get; set; }
         [Required]
         public int VisitorType { get; set; }
+        [Required]
+        public DateTimeOffset AddedDate { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset? AccessesDate { get; set; }
         [Required]
         public int VisitorStatus { get; set; }

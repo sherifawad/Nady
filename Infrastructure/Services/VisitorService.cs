@@ -19,10 +19,22 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IReadOnlyList<MemberVisitor>> CreateVisitorsAsync(MemberVisitor visitor, int count = 1)
+        public async Task<IReadOnlyList<MemberVisitor>> CreateVisitorsAsync(
+            MemberVisitor visitor,
+            decimal singleVisitorPrice,
+            double? discount,
+            double? tax,
+            int? method,
+            string note,
+            int count = 1)
         {
+            // Ensure count not less than 1
+            count = count < 1 ? 1 : count;
+            //check if member exist and the member is owner
             var member = await _unitOfWork.Repository<Member>().FindAsync(visitor?.MemberId);
-            if (member is null) return null;
+            if (member is null || !member.IsOwner) return null;
+
+
             var list = new List<MemberVisitor>();
 
             for (int i = 0; i < count; i++)
@@ -30,6 +42,30 @@ namespace Infrastructure.Services
                 await _unitOfWork.Repository<MemberVisitor>().AddItemAsync(visitor);
                 list.Add(visitor);
             }
+            // add Payment if visitor type is paid
+            if (visitor.VisitorType == VisitorType.Paid)
+            {
+                var visitorPayment = new MemberPayment
+                {
+                    Date = DateTimeOffset.Now,
+                    DiscountPercentage = discount,
+                    TaxPercentage = tax,
+                    PaymentType = PaymentType.One,
+                    MemberId = member.Id,
+                    Name = "Add visitors",
+                    PaymentMethod = (PaymentMethod?)method,
+                    PaymentTotal = singleVisitorPrice * count,
+                    Note = note
+                };
+                foreach (var item in list)
+                {
+                    // Add visitor id to payment notes to ease delete payment and corresponding visitores
+                    visitorPayment.Note = visitorPayment.Note is null ? $"Visitor Id: {item.Id}" : visitorPayment.Note + $"{ Environment.NewLine}Visitor Id: {item.Id}";
+
+                }
+                await _unitOfWork.Repository<MemberPayment>().AddItemAsync(visitorPayment);
+            }
+
             // save to db
             if (await _unitOfWork.Complete()) return list;
             return null;
@@ -45,93 +81,30 @@ namespace Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> DeleteVisitorsAsync(string memberId, int type = 0, int status = 0)
+        public async Task<IReadOnlyList<MemberVisitor>> GetVisitorsAsync(
+            string note = null,
+            string memberId = null,
+            int? type = null,
+            int? status = null,
+            DateTimeOffset? addedStart = null,
+            DateTimeOffset? addedEnd = null,
+            DateTimeOffset? accessedStart = null,
+            DateTimeOffset? accessedEnd = null,
+            int? gate = null
+
+            )
         {
-
-            var memberVisitors = await GetVisitorsAsync(memberId, type, status);
-
-            if (memberVisitors == null) return false;
-
-            foreach (var visitor in memberVisitors)
-            {
-                await _unitOfWork.Repository<MemberVisitor>().DeleteItemAsync(visitor);
-            }
-            if (await _unitOfWork.Complete()) return true;
-
-            return false;
-        }
-
-        public async Task<IReadOnlyList<MemberVisitor>> GetMemberVisitoresByTypeAsync(string memberId, int type = 0)
-        {
-            return type switch
-            {
-                0 => await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId, orderBy: y => y.OrderBy(y => y.AccessesDate)),
-                _ => await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId && ((int)x.VisitorType) == type, orderBy: y => y.OrderBy(y => y.AccessesDate))
-            };
-        }
-        public async Task<IReadOnlyList<MemberVisitor>> GetMemberVisitoresByStatusAsync(string memberId, int status = 0)
-        {
-            return status switch
-            {
-                0 => await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId, orderBy: y => y.OrderBy(y => y.AccessesDate)),
-                _ => await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId && ((int)x.VisitorStatus) == status, orderBy: y => y.OrderBy(y => y.AccessesDate))
-            };
-        }
-
-        public async Task<IReadOnlyList<MemberVisitor>> GetVisitorsByStatusAsync(int status = 0)
-        {
-            return status switch
-            {
-                0 => await _unitOfWork.Repository<MemberVisitor>().Get(orderBy: y => y.OrderBy(y => y.AccessesDate)),
-                _ => await _unitOfWork.Repository<MemberVisitor>().Get(x => ((int)x.VisitorStatus) == status, orderBy: y => y.OrderBy(y => y.AccessesDate))
-            };
-
-        }
-
-        public async Task<IReadOnlyList<MemberVisitor>> GetVisitorsByTypeAsync(int type = 0)
-        {
-            return type switch
-            {
-                0 => await _unitOfWork.Repository<MemberVisitor>().Get(orderBy: y => y.OrderBy(y => y.AccessesDate)),
-                _ => await _unitOfWork.Repository<MemberVisitor>().Get(x => ((int)x.VisitorType) == type, orderBy: y => y.OrderBy(y => y.AccessesDate))
-            };
-
-        }
-        public async Task<IReadOnlyList<MemberVisitor>> GetVisitorsWithoutMemberAsync(int type = 0, int status = 0)
-        {
-            if (type != 0 && status == 0)
-                return await GetVisitorsByTypeAsync(type);
-            else if (type == 0 && status != 0)
-                return await GetVisitorsByStatusAsync(status);
-            else if (type != 0 && status != 0)
-                return await _unitOfWork.Repository<MemberVisitor>().Get(x => ((int)x.VisitorStatus) == status && ((int)x.VisitorType) == type,
-                    orderBy: y => y.OrderBy(y => y.AccessesDate));
-            else if(type == 0 && status == 0)
-                return await _unitOfWork.Repository<MemberVisitor>().GetAllAsync();
-
-            return null;
-
-        }
-
-        public async Task<IReadOnlyList<MemberVisitor>> GetVisitorsAsync(string memberId = null, int type = 0, int status = 0)
-        {
-            if (!string.IsNullOrWhiteSpace(memberId) && type != 0 && status != 0)
-                return await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId && ((int)x.VisitorStatus) == status && ((int)x.VisitorType) == type,
-                    orderBy: y => y.OrderBy(y => y.AccessesDate));
-
-            else if (!string.IsNullOrWhiteSpace(memberId) && type != 0 && status == 0)
-                return await GetMemberVisitoresByTypeAsync(memberId, type);
-
-            else if (!string.IsNullOrWhiteSpace(memberId) && type == 0 && status != 0)
-                return await GetMemberVisitoresByStatusAsync(memberId, status);
-
-            else if (!string.IsNullOrWhiteSpace(memberId) && type == 0 && status == 0)
-                return await _unitOfWork.Repository<MemberVisitor>().Get(x => x.MemberId == memberId, orderBy: y => y.OrderBy(y => y.AccessesDate));
-
-            else if (string.IsNullOrWhiteSpace(memberId))
-                return await GetVisitorsWithoutMemberAsync(type, status);
-
-            return null;
+            return await _unitOfWork.Repository<MemberVisitor>().Get(x =>
+                (!string.IsNullOrWhiteSpace(memberId) ? x.MemberId == memberId : true) &&
+                (!string.IsNullOrWhiteSpace(note) ? x.Note.ToLower().Contains(note.ToLower()) : true) &&
+                (gate != null ? x.Gate == (Gate)gate : true) &&
+                (type != null ? x.VisitorType == (VisitorType)type : true) &&
+                (status != null ? x.VisitorStatus == (VisitorStatus)status : true) &&
+                (addedStart != null ? x.AddedDate >= addedStart : true) &&
+                (addedEnd != null ? x.AddedDate <= addedEnd : true)&&
+                (accessedStart != null ? x.AccessesDate >= accessedStart : true) &&
+                (accessedEnd != null ? x.AccessesDate <= accessedEnd : true),
+                orderBy: x => x.OrderBy(y => y.AddedDate).ThenBy(y => y.AccessesDate), track: false);
         }
 
         public async Task<MemberVisitor> GetVisitorAsync(string visitorId)

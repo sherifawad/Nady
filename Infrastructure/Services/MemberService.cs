@@ -26,11 +26,19 @@ namespace Infrastructure.Services
         }
         public async Task<Member> CreateMemberAsync(Member memberToCreate, int type, int? method, decimal total, double tax, double discount, DateTimeOffset date, string note, decimal scheduledpaymenamount, int scheduledevery)
         {
-            var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower().Replace(" ", "") == memberToCreate.Name.ToLower().Replace(" ", ""), track: false);
+            //Replace multiple White spaces between words to one space
+            memberToCreate.Name = regex.Replace(memberToCreate.Name, " ").Trim();
+            //Remove WhiteSpaces
+            memberToCreate.Code = regex.Replace(memberToCreate.Code, " ").Replace(" ","").Trim();
+            //Check for exact name dublicate
+            var DublicateName = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Name.ToLower() == memberToCreate.Name.ToLower(), track: false);
             if (DublicateName != null) return null;
-            //member.MemberHistoriesList.Add(memberHistory);
-            //member.MemberPayments.Add(payment);
-            memberToCreate.Name = regex.Replace(memberToCreate.Name, " ") .Trim();
+            // ensure every code group has one owner
+            if (memberToCreate.IsOwner)
+            {
+                var DublicateOwner = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Code == memberToCreate.Code && x.IsOwner == true, track: false);
+                if (DublicateOwner != null) return null;
+            }
             await _unitOfWork.Repository<Member>().AddItemAsync(memberToCreate);
             var memberHistory = new MemberHistory {MemberId = memberToCreate.Id, Date = DateTimeOffset.Now, Title = "Added" };
             await _unitOfWork.Repository<MemberHistory>().AddItemAsync(memberHistory);

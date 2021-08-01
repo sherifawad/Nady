@@ -35,14 +35,30 @@ namespace Nady.Controllers
         /// <summary>
         /// Get visitors 
         /// </summary>
-        /// <param name="memberId">Member Id</param>
-        /// <param name="type">0 all, 1 Free, 2 Paid</param>
-        /// <param name="status">0 all, 1 used, 2 unused 3 suspend</param>
+        /// <param name="note"></param>
+        /// <param name="memberId"></param>
+        /// <param name="type"></param>
+        /// <param name="status"></param>
+        /// <param name="addedStart"></param>
+        /// <param name="addedEnd"></param>
+        /// <param name="accessedStart"></param>
+        /// <param name="accessedEnd"></param>
+        /// <param name="gate"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IEnumerable<MemberVisitorDto>> GetVisitoresAsync([FromQuery] string memberId = null , [FromQuery] int type = 0, [FromQuery] int status = 0)
+        public async Task<IEnumerable<MemberVisitorDto>> GetVisitoresAsync(
+            [FromQuery]string note = null,
+            [FromQuery]string memberId = null,
+            [FromQuery]int? type = null,
+            [FromQuery]int? status = null,
+            [FromQuery]DateTimeOffset? addedStart = null,
+            [FromQuery]DateTimeOffset? addedEnd = null,
+            [FromQuery]DateTimeOffset? accessedStart = null,
+            [FromQuery]DateTimeOffset? accessedEnd = null,
+            [FromQuery] int? gate = null
+            )
         {
-            return (await _visitorService.GetVisitorsAsync(memberId, type, status)).Select(x => x.AsDto());
+            return (await _visitorService.GetVisitorsAsync(note, memberId, type, status, addedStart, addedEnd, accessedStart, accessedEnd, gate)).Select(x => x.AsDto());
                 
         }
 
@@ -66,15 +82,28 @@ namespace Nady.Controllers
         /// <summary>
         /// create Visitors
         /// </summary>
-        /// <param name="visitor">visitor to create</param>
-        /// <param name="count">number of visitors to create</param>
+        /// <param name="visitor"></param>
+        /// <param name="singleVisitorPrice"></param>
+        /// <param name="discount"></param>
+        /// <param name="tax"></param>
+        /// <param name="method"></param>
+        /// <param name="note"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<MemberVisitorDto>>> CreateVisitorsAsync([FromBody] MemberVisitorDto visitor, [FromQuery]int count = 1)
+        public async Task<ActionResult<IEnumerable<MemberVisitorDto>>> CreateVisitorsAsync(
+            [FromBody] MemberVisitorDto visitor,
+            [FromQuery]decimal singleVisitorPrice,
+            [FromQuery]double? discount,
+            [FromQuery]double? tax,
+            [FromQuery]int? method,
+            [FromQuery] string note,
+            [FromQuery] int count = 1
+            )
         {
-            var createdVisitores = await _visitorService.CreateVisitorsAsync(visitor.FromDto(), count);
+            var createdVisitores = await _visitorService.CreateVisitorsAsync(visitor.FromDto(), singleVisitorPrice, discount, tax, method, note, count);
             if (createdVisitores == null)
                 return BadRequest("Failed to Create visitors");
             if (count > 1)
@@ -118,24 +147,6 @@ namespace Nady.Controllers
             if (result) return NoContent();
 
             return BadRequest("Problem deleting the visitor");
-        }
-
-        /// <summary>
-        /// Delete member visitors
-        /// </summary>
-        /// <param name="memberId">member id</param>
-        /// <param name="type">visitor type => 0 all, 1 Free, 2 Paid</param>
-        /// <param name="status">0 all, 1 used, 2 unused 3 suspend</param>
-        /// <returns></returns>
-        [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(string memberId, int type = 0, int status = 0)
-        {
-            var result = await _visitorService.DeleteVisitorsAsync(memberId, type, status);
-            if (result) return NoContent();
-
-            return BadRequest("Problem deleting the member visitores");
         }
     }
 }

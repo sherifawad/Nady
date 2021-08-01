@@ -13,7 +13,6 @@ namespace Core.Interfaces
             string memberId = null,
             string name = null,
             string note = null,
-            bool? isScheduled = null,
             int? paymentType = null,
             int? paymentMethod = null,
             decimal? paymentTotal = null,

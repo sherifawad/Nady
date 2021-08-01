@@ -168,6 +168,9 @@ namespace Infrastructure.Migrations
                     b.Property<long?>("AccessesDate")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("AddedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("Gate")
                         .HasColumnType("INTEGER");
 

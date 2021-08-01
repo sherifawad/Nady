@@ -54,7 +54,6 @@ namespace Nady.Controllers
         public async Task<IEnumerable<MemberPaymentDto>> GetPaymentsAsync([FromQuery]string memberId = null,
             [FromQuery] string name = null,
             [FromQuery] string note = null,
-            [FromQuery] bool? isScheduled = null,
             [FromQuery] int? paymentType = null,
             [FromQuery] int? paymentMethod = null,
             [FromQuery] decimal? paymentTotal = null,
@@ -64,7 +63,7 @@ namespace Nady.Controllers
             [FromQuery] DateTimeOffset? endDate = null)
         {
 
-            return(await _paymentService.GetPaymentsAsync(memberId, name, note, isScheduled, paymentType, paymentMethod, paymentTotal, taxPercentage, discountPercentage, startDate, endDate))
+            return(await _paymentService.GetPaymentsAsync(memberId, name, note, paymentType, paymentMethod, paymentTotal, taxPercentage, discountPercentage, startDate, endDate))
                 .Select( x => x.AsDto());
 
             //Logger.LogInfromation($"{DateTime.UtcNow.ToString("hh:mm:ss")}: Retrived {members}");

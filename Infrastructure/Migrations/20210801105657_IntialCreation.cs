@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class IntialCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,6 +98,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<string>(maxLength: 66, nullable: false),
                     MemberId = table.Column<string>(maxLength: 66, nullable: false),
                     VisitorType = table.Column<int>(nullable: false),
+                    AddedDate = table.Column<long>(nullable: false),
                     AccessesDate = table.Column<long>(nullable: true),
                     VisitorStatus = table.Column<int>(nullable: false),
                     Gate = table.Column<int>(nullable: true),
