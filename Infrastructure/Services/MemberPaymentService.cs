@@ -57,7 +57,7 @@ namespace Infrastructure.Services
             DateTimeOffset? startDate = null,
             DateTimeOffset? endDate = null)
         {
-            if (!Enum.IsDefined(typeof(PaymentType), paymentType))
+            if (paymentType is not null && !Enum.IsDefined(typeof(PaymentType), paymentType))
                 return null;
             return await _unitOfWork.Repository<MemberPayment>().Get(x =>
                 (!string.IsNullOrWhiteSpace(memberId) ? x.MemberId == memberId : true) &&

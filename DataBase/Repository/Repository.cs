@@ -21,7 +21,7 @@ namespace DataBase.Repository
             dbSet = _context.Set<T>();
         }
 
-        public async Task<T> AddItemAsync(T item, bool save = false) 
+        public async Task<T> AddItemAsync(T item, bool save = false)
         {
             await dbSet.AddAsync(item);
             if (save)
@@ -30,7 +30,7 @@ namespace DataBase.Repository
             return item;
         }
 
-        public async Task<bool> DeleteItemAsync(T item, bool save = false) 
+        public async Task<bool> DeleteItemAsync(T item, bool save = false)
         {
             if (item == null) throw new ArgumentNullException("entity");
 
@@ -49,18 +49,18 @@ namespace DataBase.Repository
         }
 
 
-        public async Task<T> FindAsync(TKey id) 
+        public async Task<T> FindAsync(TKey id)
         {
             return await dbSet.FindAsync(id);
 
         }
 
-        public async Task<List<T>> GetAllAsync(bool forceRefresh = false) 
+        public async Task<List<T>> GetAllAsync(bool forceRefresh = false)
         {
             return await dbSet.ToListAsync();
         }
 
-        public async Task<bool> UpdateItemAsync(T item, bool save = false) 
+        public async Task<bool> UpdateItemAsync(T item, bool save = false)
         {
 
             dbSet.Update(item);
@@ -94,7 +94,7 @@ namespace DataBase.Repository
         }
 
         public async Task<List<T>> Get(Expression<Func<T, bool>> filter = null, string includeProperties = "",
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool track = false) 
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool track = false)
         {
             IQueryable<T> query = null;
             if (track)
@@ -146,7 +146,7 @@ namespace DataBase.Repository
 
         }
 
-        private IQueryable<T> EvaluateInclude(IQueryable<T> current, Expression<Func<T, object>> item) 
+        private IQueryable<T> EvaluateInclude(IQueryable<T> current, Expression<Func<T, object>> item)
         {
             if (item.Body is MethodCallExpression)
             {
@@ -168,14 +168,14 @@ namespace DataBase.Repository
             return current.Include(item);
         }
 
-        public bool IsTracked(T item) 
+        public bool IsTracked(T item)
         {
             return Context.Entry(item).State == EntityState.Added
                                               || Context.Entry(item).State == EntityState.Modified
                                               || Context.Entry(item).State == EntityState.Deleted;
         }
 
-        public async Task<bool> InsertOrUpdate(TKey id, T item, bool save = false) 
+        public async Task<bool> InsertOrUpdate(TKey id, T item, bool save = false)
         {
             var itemInDB = await dbSet.FindAsync(id);
             if (itemInDB == null)
@@ -190,6 +190,12 @@ namespace DataBase.Repository
             if (save)
                 await _context.SaveChangesAsync();
             return await Task.FromResult(true);
+        }
+
+        public async Task<T> Getlast()
+        {
+            return await dbSet.LastOrDefaultAsync();
+
         }
     }
 }

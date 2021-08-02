@@ -40,7 +40,6 @@ namespace Nady.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<IEnumerable<MemberDto>> GetMembers(
             [FromQuery]string memberName = null,
             [FromQuery]string code = null,
@@ -69,6 +68,22 @@ namespace Nady.Controllers
         public async Task<ActionResult<MemberDto>> GetMemberById(string id)
         {
             var member = await _memberService.GetMemberAsync(id);
+
+            if (member == null) return NotFound(new ApiResponse(404));
+
+            return member.AsDto();
+        }
+
+        /// <summary>
+        /// Get last member
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("last")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<MemberDto>> GetLastmemberAsync()
+        {
+            var member = await _memberService.GetLastMember();
 
             if (member == null) return NotFound(new ApiResponse(404));
 
@@ -143,7 +158,7 @@ namespace Nady.Controllers
         }
 
         /// <summary>
-        /// Delete a member
+        /// Delete a member and it's payments, histories and if is owner delete folloe
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -155,7 +170,7 @@ namespace Nady.Controllers
             var result = await _memberService.DeleteMemberAsync(id);
             if (result) return NoContent();
 
-            return BadRequest("Problem deleting the message");
+            return BadRequest("Problem deleting the member");
         }
     }
 }

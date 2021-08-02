@@ -78,6 +78,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Nady.Controllers.MembersController.GetLastmemberAsync">
+            <summary>
+            Get last member
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Nady.Controllers.MembersController.CreateMember(Infrastructure.Dtos.MemberDto,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Decimal,System.Nullable{System.Double},System.Nullable{System.Double},System.String,System.Decimal,System.Int32)">
             <summary>
             Create A member
@@ -103,7 +109,7 @@
         </member>
         <member name="M:Nady.Controllers.MembersController.DeleteMember(System.String)">
             <summary>
-            Delete a member
+            Delete a member and it's payments, histories and if is owner delete folloe
             </summary>
             <param name="id"></param>
             <returns></returns>

@@ -27,5 +27,6 @@ namespace Core.Interfaces
             string note,
             decimal scheduledpaymenamount,
             int scheduledevery);
+        Task<Member> GetLastMember();
     }
 }

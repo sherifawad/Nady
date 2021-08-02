@@ -19,6 +19,7 @@ namespace DataBase.Repository
         Task<T> FindAsync(TKey id);
         Task<List<T>> GetAllAsync(bool forceRefresh = false);
         Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = "", bool track = false);
+        Task<T> Getlast();
         Task<List<T>> Get(Expression<Func<T, bool>> filter = null, string includeProperties = "", Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool track = false) ;
         IQueryable<T> Query(Expression<Func<T, bool>> filter = null, string includeProperties = "", Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null);
         bool IsTracked(T item) ;

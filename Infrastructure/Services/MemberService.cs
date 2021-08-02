@@ -35,8 +35,25 @@ namespace Infrastructure.Services
             decimal scheduledpaymenamount,
             int scheduledevery)
         {
+            //check if total paid is not zero
+            //check id the payment type is not null 
+            // check id the payment type is within predefinede enum (PaymentType)
+            // if payment type is scheduled => check id the pay interval days is not zero also the amount of every sechedule is not zero
             if (total == 0 || type == null || !Enum.IsDefined(typeof(PaymentType), type) || ((type == ((int)PaymentType.Scheduled)) && (scheduledpaymenamount == default || scheduledevery == 0)))
                 return null;
+
+            //if (!memberToCreate.IsOwner && string.IsNullOrWhiteSpace(memberToCreate.Code))
+            //    return null;
+            //else if (memberToCreate.IsOwner && string.IsNullOrWhiteSpace(memberToCreate.Code))
+            //{
+            //    var lastcode = (await _unitOfWork.Repository<Member>().Getlast()).Code;
+            //    int num;
+            //    int.TryParse(lastcode?.Split('/')[1], out num) ;
+            //    if (num == 0)
+            //        return null;
+            //    memberToCreate.Code = $"{DateTimeOffset.Now.Year}/{num + 1}";
+
+            //}
 
             //Replace multiple White spaces between words to one space
             memberToCreate.Name = regex.Replace(memberToCreate.Name, " ").Trim();
@@ -115,7 +132,19 @@ namespace Infrastructure.Services
         {
             var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == memberId);
             if (member == null) return false;
-            await _unitOfWork.Repository<Member>().DeleteItemAsync(member);
+            //If the member is owner delete also all other in the same code group
+            if (member.IsOwner)
+            {
+                var allMembers = await GetMembersAsync(code: member.Code);
+                foreach (var item in allMembers)
+                {
+                    await _unitOfWork.Repository<Member>().DeleteItemAsync(item);
+                }
+            }
+            else
+            {
+                await _unitOfWork.Repository<Member>().DeleteItemAsync(member);
+            }
             if (await _unitOfWork.Complete()) return true;
 
             return false;
@@ -125,6 +154,14 @@ namespace Infrastructure.Services
         public async Task<Member> GetMemberAsync(string memberId)
         {
             var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == memberId, $"{nameof(Member.MemberDetails)}", false);
+
+            if (member == null) return null;
+
+            return member;
+        }
+        public async Task<Member> GetLastMember()
+        {
+            var member = await _unitOfWork.Repository<Member>().Getlast();
 
             if (member == null) return null;
 
@@ -182,18 +219,6 @@ namespace Infrastructure.Services
                 (isowner != null ? x.IsOwner == isowner : true) &&
                 ((status != null && Enum.IsDefined(typeof(MemberStatus), status)) ? x.MemberStatus == (MemberStatus)status : true),
                 orderBy: x => x.OrderBy(y => y.Name), track: false);
-
-
-            //if (string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
-            //    return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()));
-            //else if(!string.IsNullOrWhiteSpace(memberName) && string.IsNullOrWhiteSpace(code))
-
-            //    //return await _unitOfWork.Repository<Member>().Get(x => keywords.Any(val => x.Name.Contains(val)));
-            ////return await _unitOfWork.Repository<Member>().Get(x => x.Name.ToLower().Contains(memberName.ToLower()));
-            //else if(!string.IsNullOrWhiteSpace(memberName) && !string.IsNullOrWhiteSpace(code))
-            //    return await _unitOfWork.Repository<Member>().Get(x => x.Code.ToLower().Contains(code.ToLower()) && x.Name.ToLower().Contains(memberName.ToLower()));
-
-            //return await _unitOfWork.Repository<Member>().GetAllAsync();
 
         }
 
