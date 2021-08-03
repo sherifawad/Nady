@@ -192,10 +192,34 @@ namespace DataBase.Repository
             return await Task.FromResult(true);
         }
 
-        public async Task<T> Getlast()
+        public async Task<T> GetFirst(Expression<Func<T, bool>> filter = null, string includeProperties = "",
+    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool track = false)
         {
-            return await dbSet.LastOrDefaultAsync();
+            IQueryable<T> query = null;
+            if (track)
+                query = dbSet;
+            else
+                query = dbSet.AsNoTracking();
 
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (!string.IsNullOrEmpty(includeProperties) && !string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return await query.FirstOrDefaultAsync(filter);
         }
     }
 }

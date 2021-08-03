@@ -161,7 +161,7 @@ namespace Infrastructure.Services
         }
         public async Task<Member> GetLastMember()
         {
-            var member = await _unitOfWork.Repository<Member>().Getlast();
+            var member = await _unitOfWork.Repository<Member>().GetFirst(orderBy:x => x.OrderByDescending(y => y.CreatedDate));
 
             if (member == null) return null;
 

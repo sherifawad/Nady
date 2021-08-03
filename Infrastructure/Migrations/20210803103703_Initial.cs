@@ -1,16 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class IntialCreation : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Audits",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    TableName = table.Column<string>(nullable: true),
+                    DateTime = table.Column<DateTime>(nullable: false),
+                    AuditType = table.Column<string>(nullable: true),
+                    AuditUser = table.Column<string>(nullable: true),
+                    KeyValues = table.Column<string>(nullable: true),
+                    OldValues = table.Column<string>(nullable: true),
+                    NewValues = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audits", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Members",
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 66, nullable: false),
+                    CreatedByUser = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<long>(nullable: false),
+                    ModifiedByUser = table.Column<string>(nullable: true),
+                    ModifiedDate = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     MemberStatus = table.Column<int>(nullable: false),
                     IsOwner = table.Column<bool>(nullable: false),
@@ -28,6 +51,10 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 66, nullable: false),
+                    CreatedByUser = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<long>(nullable: false),
+                    ModifiedByUser = table.Column<string>(nullable: true),
+                    ModifiedDate = table.Column<long>(nullable: false),
                     NickName = table.Column<string>(maxLength: 50, nullable: false),
                     Phone = table.Column<string>(maxLength: 50, nullable: true),
                     Image = table.Column<string>(maxLength: 200, nullable: true),
@@ -49,6 +76,10 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 66, nullable: false),
+                    CreatedByUser = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<long>(nullable: false),
+                    ModifiedByUser = table.Column<string>(nullable: true),
+                    ModifiedDate = table.Column<long>(nullable: false),
                     MemberId = table.Column<string>(maxLength: 66, nullable: false),
                     Title = table.Column<string>(maxLength: 100, nullable: false),
                     Date = table.Column<long>(nullable: false),
@@ -70,6 +101,10 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 66, nullable: false),
+                    CreatedByUser = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<long>(nullable: false),
+                    ModifiedByUser = table.Column<string>(nullable: true),
+                    ModifiedDate = table.Column<long>(nullable: false),
                     MemberId = table.Column<string>(maxLength: 66, nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     PaymentType = table.Column<int>(nullable: false),
@@ -96,6 +131,10 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 66, nullable: false),
+                    CreatedByUser = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<long>(nullable: false),
+                    ModifiedByUser = table.Column<string>(nullable: true),
+                    ModifiedDate = table.Column<long>(nullable: false),
                     MemberId = table.Column<string>(maxLength: 66, nullable: false),
                     VisitorType = table.Column<int>(nullable: false),
                     AddedDate = table.Column<long>(nullable: false),
@@ -120,6 +159,10 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 66, nullable: false),
+                    CreatedByUser = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<long>(nullable: false),
+                    ModifiedByUser = table.Column<string>(nullable: true),
+                    ModifiedDate = table.Column<long>(nullable: false),
                     MemberPaymentId = table.Column<string>(maxLength: 66, nullable: false),
                     PaymentAmount = table.Column<double>(nullable: false),
                     PaymentDueDate = table.Column<long>(nullable: false),
@@ -162,6 +205,9 @@ namespace Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Audits");
+
             migrationBuilder.DropTable(
                 name: "MemberDetails");
 

@@ -9,5 +9,13 @@ namespace Core.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [MaxLength(66)]
         public string Id { get; set; }
+
+        public string CreatedByUser { get; set; }
+
+        public DateTimeOffset CreatedDate { get; set; }
+
+        public string ModifiedByUser { get; set; }
+
+        public DateTimeOffset ModifiedDate { get; set; }
     }
 }

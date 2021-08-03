@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(NadyDataContext))]
-    [Migration("20210801105657_IntialCreation")]
-    partial class IntialCreation
+    [Migration("20210803103703_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,10 +30,22 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsOwner")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MemberStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ModifiedDate")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -65,9 +77,21 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Image")
                         .HasColumnType("TEXT")
                         .HasMaxLength(200);
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ModifiedDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("NickName")
                         .IsRequired()
@@ -90,6 +114,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
 
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<long>("Date")
                         .HasColumnType("INTEGER");
 
@@ -101,6 +131,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ModifiedDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -121,6 +157,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
 
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<long>("Date")
                         .HasColumnType("INTEGER");
 
@@ -131,6 +173,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ModifiedDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -173,6 +221,12 @@ namespace Infrastructure.Migrations
                     b.Property<long>("AddedDate")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("Gate")
                         .HasColumnType("INTEGER");
 
@@ -180,6 +234,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ModifiedDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Note")
                         .HasColumnType("TEXT")
@@ -205,6 +265,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
 
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("Fulfiled")
                         .HasColumnType("INTEGER");
 
@@ -215,6 +281,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(66);
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ModifiedDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Note")
                         .HasColumnType("TEXT")
@@ -234,6 +306,38 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MemberPaymentId");
 
                     b.ToTable("ScheduledPayments");
+                });
+
+            modelBuilder.Entity("DataBase.Models.Audit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AuditType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AuditUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("KeyValues")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TableName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Audits");
                 });
 
             modelBuilder.Entity("Core.Models.MemberDetails", b =>
