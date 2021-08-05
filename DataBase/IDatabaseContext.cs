@@ -14,6 +14,6 @@ namespace DataBase
 
         EntityEntry Entry(object entity);
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(string userId = null);
     }
 }

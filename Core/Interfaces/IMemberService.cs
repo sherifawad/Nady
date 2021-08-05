@@ -15,8 +15,10 @@ namespace Core.Interfaces
             string relationshop = null,
             string note = null);
         Task<Member> GetMemberAsync(string memberId);
-        Task<Member> UpdateMemberAsync(Member member);
-        Task<bool> DeleteMemberAsync(string memberId);
+        Task<Member> UpdateMemberAsync(Member member,
+            string userId);
+        Task<bool> DeleteMemberAsync(string memberId,
+            string userId);
         Task<Member> CreateMemberAsync(
             Member memberToCreate,
             int? type,
@@ -26,7 +28,8 @@ namespace Core.Interfaces
             double? discount,
             string note,
             decimal scheduledpaymenamount,
-            int scheduledevery);
+            int scheduledevery,
+            string userId);
         Task<Member> GetLastMember();
     }
 }

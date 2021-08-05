@@ -7,8 +7,8 @@ namespace DataBase.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        Task CommitAsync();
-        Task<bool> Complete();
+        Task CommitAsync(string userId = null);
+        Task<bool> Complete(string userId = null);
         bool HasChanges();
         IRepository<string, T> Repository<T>() where T : BaseModel;
     }

@@ -5,9 +5,11 @@ using DataBase.UnitOfWork;
 using Infrastructure.Dtos;
 using Infrastructure.Extensions;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nady.Errors;
+using Nady.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace Nady.Controllers
     /// <summary>
     /// Members Controllers
     /// </summary>
+    [Authorize(Policy = "ModeratePhotoRole")]
     public class MembersController : BaseApiController
     {
         private readonly IMemberService _memberService;
@@ -128,7 +131,8 @@ namespace Nady.Controllers
                 discount,
                 note,
                 scheduledpaymenamount,
-                scheduledevery);
+                scheduledevery,
+                User.GetUserId());
             if (createdMember == null)
                 return BadRequest("Failed to Add Member");
 
@@ -151,7 +155,8 @@ namespace Nady.Controllers
             if (memberDto.Id != id) return BadRequest("Failed to update");
             var memberToUpdate = await _memberService.GetMemberAsync(id);
             if (memberToUpdate == null) return NotFound(new ApiResponse(404));
-            var updatedMember = await _memberService.UpdateMemberAsync(memberDto.FromDto());
+            var updatedMember = await _memberService.UpdateMemberAsync(memberDto.FromDto(),
+                User.GetUserId());
             if (updatedMember != null) return NoContent();
 
             return BadRequest("Failed to update");
@@ -167,7 +172,8 @@ namespace Nady.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteMember(string id)
         {
-            var result = await _memberService.DeleteMemberAsync(id);
+            var result = await _memberService.DeleteMemberAsync(id,
+                User.GetUserId());
             if (result) return NoContent();
 
             return BadRequest("Problem deleting the member");

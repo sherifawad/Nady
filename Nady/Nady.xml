@@ -286,5 +286,17 @@
             <param name="id">visitor id</param>
             <returns></returns>
         </member>
+        <member name="T:Nady.SwaggerConfig.AuthorizationOperationFilter">
+            <summary>
+            Authorization Filter
+            </summary>
+        </member>
+        <member name="M:Nady.SwaggerConfig.AuthorizationOperationFilter.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <summary>
+            Add authorization field to add access ocken  for controllers which have authorization tag
+            </summary>
+            <param name="operation"></param>
+            <param name="context"></param>
+        </member>
     </members>
 </doc>

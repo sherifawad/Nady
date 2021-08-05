@@ -1,4 +1,5 @@
 using DataBase;
+using IdentityDataBase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nady.Extensions;
 using Nady.Middleware;
+using Nady.SwaggerConfig;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
@@ -23,6 +25,8 @@ namespace Nady
 {
     public class Startup
     {
+        private object _config;
+
         public Startup(IConfiguration configuration)
         {
             _Configuration = configuration;
@@ -45,13 +49,25 @@ namespace Nady
                 // Fix error "No route matches the supplied values" when using async suffix in controlleres methods name 
                 options.SuppressAsyncSuffixInActionNames = false;
             });
-            services.AddDbContext<IDatabaseContext, NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection"),
+
+            services.AddDbContext<NadyDataContext>(x => x.UseSqlite(_Configuration.GetConnectionString("DefaultConnection"),
+                x => x.MigrationsAssembly(nameof(Infrastructure))));
+
+            services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlite(_Configuration.GetConnectionString("IdentityConnection"),
                 x => x.MigrationsAssembly(nameof(Infrastructure))));
 
             services.AddApplicationServices();
 
+            services.IdentityServiceExtensions(_Configuration);
+
+
             services.AddSwaggerGen(c =>
             {
+
+                c.OperationFilter<AuthorizationOperationFilter>();
+
+                c.DocumentFilter<AuthTokenOperation>();
+
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Title = "Nady", Version = "v1",
@@ -61,6 +77,10 @@ namespace Nady
                         Email = "shereifawad@gmail.com"
                     }
                 });
+
+
+
+                c.UseInlineDefinitionsForEnums();
 
                 // genrate the xml docs that'll drive the swagger docs
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -107,8 +127,8 @@ namespace Nady
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

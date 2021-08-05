@@ -33,7 +33,8 @@ namespace Infrastructure.Services
             double? discount,
             string note,
             decimal scheduledpaymenamount,
-            int scheduledevery)
+            int scheduledevery,
+            string userId)
         {
             //check if total paid is not zero
             //check id the payment type is not null 
@@ -124,11 +125,12 @@ namespace Infrastructure.Services
             }
 
             // save to db
-            if (await _unitOfWork.Complete()) return memberToCreate;
+            if (await _unitOfWork.Complete(userId)) return memberToCreate;
             return null;
         }
         
-        public async Task<bool> DeleteMemberAsync(string memberId)
+        public async Task<bool> DeleteMemberAsync(string memberId,
+            string userId)
         {
             var member = await _unitOfWork.Repository<Member>().GetFirstOrDefault(x => x.Id == memberId);
             if (member == null) return false;
@@ -145,7 +147,7 @@ namespace Infrastructure.Services
             {
                 await _unitOfWork.Repository<Member>().DeleteItemAsync(member);
             }
-            if (await _unitOfWork.Complete()) return true;
+            if (await _unitOfWork.Complete(userId)) return true;
 
             return false;
 
@@ -222,11 +224,12 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<Member> UpdateMemberAsync(Member member)
+        public async Task<Member> UpdateMemberAsync(Member member,
+            string userId)
         {
             await _unitOfWork.Repository<Member>().UpdateItemAsync(member);
             // save to db
-            if (await _unitOfWork.Complete()) return member;
+            if (await _unitOfWork.Complete(userId)) return member;
 
             return null;
         }

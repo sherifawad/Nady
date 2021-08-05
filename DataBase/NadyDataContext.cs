@@ -32,9 +32,11 @@ namespace DataBase
         {
             base.OnModelCreating(modelBuilder);
 
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppContext).Assembly);
 
-            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
 
             if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite") modelBuilder.ApplyDataFixForSqlite();
@@ -42,15 +44,23 @@ namespace DataBase
 
         #region Audit Process
 
-        public async override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        //public async override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        //{
+        //    var auditEntries = OnBeforeSaveChanges();
+        //    var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        //    await OnAfterSaveChanges(auditEntries);
+        //    return result;
+        //}
+
+        public virtual async Task<int> SaveChangesAsync(string userId = null)
         {
-            var auditEntries = OnBeforeSaveChanges();
-            var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            var auditEntries = OnBeforeSaveChanges(userId);
+            var result = await base.SaveChangesAsync();
             await OnAfterSaveChanges(auditEntries);
             return result;
         }
 
-        private List<AuditEntry> OnBeforeSaveChanges()
+        private List<AuditEntry> OnBeforeSaveChanges(string userId)
         {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();
@@ -61,15 +71,13 @@ namespace DataBase
                 if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged )
                     continue;
 
-                //TODO add authentication
-                //var auditEntry = new AuditEntry(entry, Authentication.LoggedUserName);
-                var auditEntry = new AuditEntry(entry, "");
+                var auditEntry = new AuditEntry(entry, userId);
                 var entityType = Model.FindEntityType(entry.Entity.GetType());
                 //var schema = entityType..GetSchema();
                 //var tableName = entityType.GetTableName();
                 //auditEntry.TableName = entry.Entity.Metadata.GetTableName();
                 //TODO add table Nmae
-                auditEntry.TableName = entityType.DisplayName();
+                auditEntry.TableName = entry.Entity.GetType().Name; 
                 auditEntries.Add(auditEntry);
 
                 foreach (var property in entry.Properties)
@@ -96,14 +104,12 @@ namespace DataBase
                     switch (entry.State)
                     {
                         case EntityState.Added:
-                            //auditEntry.NewValues[propertyName] = property.CurrentValue;
-                            //auditEntry.AuditType = AuditType.Create;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            auditEntry.AuditType = AuditType.Create;
                             if (entidad != null)
                             {
                                 entidad.CreatedDate = DateTimeOffset.Now;
-                                //TODO add authentication
-                                entidad.CreatedByUser = "";
-                                //entidad.CreatedByUser = Authentication.LoggedUserName;
+                                entidad.CreatedByUser = userId;
                             }
                             break;
 
@@ -121,9 +127,7 @@ namespace DataBase
                                 if (entidad != null)
                                 {
                                     entidad.ModifiedDate = DateTimeOffset.Now;
-                                    entidad.ModifiedByUser = "";
-                                    //TODO add authentication
-                                    //entidad.ModifiedByUser = Authentication.LoggedUserName;
+                                    entidad.ModifiedByUser = userId;
                                 }
                             }
                             break;

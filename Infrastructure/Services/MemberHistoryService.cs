@@ -12,10 +12,12 @@ namespace Infrastructure.Services
     public class MemberHistoryService : IMemberHistoryService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserRepository _userRepository;
 
-        public MemberHistoryService(IUnitOfWork unitOfWork)
+        public MemberHistoryService(IUnitOfWork unitOfWork, IUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
+            _userRepository = userRepository;
         }
         public async Task<MemberHistory> CreateHistoryAsync(MemberHistory history)
         {

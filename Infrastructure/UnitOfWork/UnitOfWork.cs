@@ -30,14 +30,14 @@ namespace Infrastructure.UnitOfWork
                 _Context.Dispose();
         }
 
-        public Task CommitAsync()
+        public Task CommitAsync(string userId = null)
         {
-            return _Context.SaveChangesAsync();
+            return _Context.SaveChangesAsync(userId);
         }
 
-        public async Task<bool> Complete()
+        public async Task<bool> Complete(string userId = null)
         {
-            return await _Context.SaveChangesAsync() > 0;
+            return await _Context.SaveChangesAsync(userId) > 0;
         }
 
         public bool HasChanges()
